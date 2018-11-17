@@ -1,9 +1,10 @@
 import math
 
 class Graph:
-	def __init__(self, nodes, edges):
+	def __init__(self, nodes, edges, epsilonDistance):
 		self.nodes = nodes
 		self.edges = edges
+		self.radius = epsilonDistance
 	def __str__(self):
 		return "Wierzcholki:\n" + \
 		"\n".join(map(lambda x: str(x), self.nodes)) + "\n" + \
