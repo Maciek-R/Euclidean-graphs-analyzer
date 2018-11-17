@@ -5,8 +5,8 @@ from utils import *
 def generateGraph(numberOfNodes = 10, epsilonDistance = 0.5):
 	nodes = []
 	for id in range(numberOfNodes):
-		x = random.random()
-		y = random.random()
+		x = round(random.random(), 5)
+		y = round(random.random(), 5)
 		nodes.append(Node(x, y, id))
 	
 	edges = []

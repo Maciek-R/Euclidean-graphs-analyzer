@@ -1,8 +1,10 @@
 import csv
 from utils import *
 
+mainFolder = 'data/'
+
 def createFileNameForGraph(numberOfNodes, radius):
-	return str(numberOfNodes) + '_' + str(radius) + '.csv'
+	return mainFolder + str(numberOfNodes) + '_' + str(radius) + '.csv'
 	
 def writeGraphToFile(graph):
 	data = []
