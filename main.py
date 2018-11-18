@@ -9,11 +9,21 @@ if __name__ == "__main__":
 	
 	graph = generateGraph(10, 0.5)
 	print(graph)
+	for node in graph.nodes:
+		print(list(map(lambda x: x.id, node.neighbours)))
 	
 	#g = preparePainterGraph(graph)
 	#drawPainterGraph(g)
 	
-	gfm.writeGraphToFile(graph)
+	print(graph.isConsistent())
+	
+	#gfm.writeGraphToFile(graph)
+	
 	graphReaded = gfm.readGraphFromFile(10, 0.5)
+	for node in graphReaded.nodes:
+		print(list(map(lambda x: x.id, node.neighbours)))
+	
+	g = preparePainterGraph(graphReaded)
+	drawPainterGraph(g)
 		
-	print(graphReaded)
+	#print(graphReaded)

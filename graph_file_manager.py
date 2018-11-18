@@ -49,5 +49,9 @@ def readGraphFromFile(numberOfNodes, radius):
 	nodes = list(map(lambda x: createNode(x[0]), nodesFromFile))
 	edges = list(map(lambda x: createEdge(x[0], nodes), edgesFromFile))
 	
+	for edge in edges:
+		edge.node1.addNeighbour(edge.node2)
+		edge.node2.addNeighbour(edge.node1)
+	
 	return Graph(nodes, edges, radius)
 	

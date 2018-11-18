@@ -16,5 +16,7 @@ def generateGraph(numberOfNodes = 10, epsilonDistance = 0.5):
 			distance = distanceBetweenNodes(node1, node2)
 			if(distance <= epsilonDistance):
 				edges.append(Edge(node1, node2))
+				node1.addNeighbour(node2)
+				node2.addNeighbour(node1)
 				
 	return Graph(nodes, edges, epsilonDistance)
