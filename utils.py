@@ -24,6 +24,34 @@ class Graph:
 					visited[neighbour.id] = True
 					stack.append(neighbour.id)
 		return vc == len(self.nodes)
+	def countMaxSizeOfConnectedComponent(self):
+		c = [0] * len(self.nodes)
+		cn = 0
+		stack = []
+		for i in range(len(self.nodes)):
+			if(c[i] > 0):
+				continue
+			cn = cn + 1
+			stack.append(i)
+			c[i] = cn
+			while(len(stack) != 0):
+				v = stack.pop()
+				for neighbour in self.nodes[v].neighbours:
+					if(c[neighbour.id] > 0):
+						continue
+					stack.append(neighbour.id)
+					c[neighbour.id] = cn
+		w = [0] * cn
+		for i in range(1, cn + 1):
+			for j in range(len(self.nodes)):
+				if(c[j] == i):
+					w[i-1] = w[i-1] + 1
+		return max(w)
+	def getMaxSizeOfConnectedComponent(self):
+		if(self.isConsistent() == True):
+			return len(self.nodes)
+		else:
+			return self.countMaxSizeOfConnectedComponent()
 		
 class Node:
 	x: int
