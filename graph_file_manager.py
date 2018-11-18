@@ -1,9 +1,12 @@
 import csv
 from utils import *
+import os
 
 mainFolder = 'data/'
 
 def createFileNameForGraph(numberOfNodes, radius):
+	if not os.path.exists(mainFolder):
+		os.makedirs(mainFolder)
 	return mainFolder + str(numberOfNodes) + '_' + str(radius) + '.csv'
 	
 def writeGraphToFile(graph):
