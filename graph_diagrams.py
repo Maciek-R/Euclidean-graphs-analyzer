@@ -15,3 +15,16 @@ def createPngForTestNumberOfNodes(tests, startFrom, endTo, radius):
 	if not os.path.exists(picturesFolder):
 		os.makedirs(picturesFolder)
 	pylab.savefig(picturesFolder + str(startFrom) + '_' + str(endTo) + '_' + str(radius) + '.png')
+	
+def createPngForTestRadius(tests, startFrom, endTo, noNodes):
+	numberOfNodes = list(map(lambda x: x[0], tests))
+	radiuses = list(map(lambda x: x[1], tests))
+	probabilities = list(map(lambda x: x[2], tests))
+	meanNumbersOfConnectedComponent = list(map(lambda x: x[3], tests))
+	
+	pylab.plot(radiuses, probabilities)
+	pylab.title('Prawdopodobienstwa spojnosci grafu od promienia dla n = ' + str(noNodes))
+	pylab.grid(True)
+	if not os.path.exists(picturesFolder):
+		os.makedirs(picturesFolder)
+	pylab.savefig(picturesFolder + str(startFrom) + '_' + str(endTo) + '_' + str(noNodes) + '.png')

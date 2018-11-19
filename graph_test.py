@@ -12,6 +12,18 @@ def testNumberOfNodes(start_from, end_to, step, radius, numberOftests):
 		tests.append(test(numberOftests, noNodes, radius, False))
 		
 	return tests
+	
+def testRadius(start_from, end_to, step, numberOfNodes, numberOftests):
+	tests = []
+	numberOfRadiusesToTest = []
+	
+	for noTest in range(start_from, end_to, step):
+		numberOfRadiusesToTest.append(noTest*0.1)
+	
+	for radius in numberOfRadiusesToTest:
+		tests.append(test(numberOftests, numberOfNodes, radius, False))
+		
+	return tests
 
 def test(numberOfTestsForOneGraph, numberOfNodes, radius, debug = True):
 	print('Test with n = ' + str(numberOfNodes) + ' r = ' + str(radius))

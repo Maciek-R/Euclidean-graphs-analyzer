@@ -9,8 +9,11 @@ import graph_diagrams
 	
 if __name__ == "__main__":
 
-	t1 = test.testNumberOfNodes(50, 501, 10, 0.1, 100)
-	graph_diagrams.createPngForTestNumberOfNodes(t1, 50, 501, 0.1)
+	#t1 = test.testNumberOfNodes(50, 501, 10, 0.1, 100)
+	#graph_diagrams.createPngForTestNumberOfNodes(t1, 50, 501, 0.1)
+	
+	t2 = test.testRadius(1, 10, 1, 100, 100)
+	graph_diagrams.createPngForTestRadius(t2, 0.1, 1, 100)
 	
 	#print(test.test(1, 5000, 0.3))
 	
