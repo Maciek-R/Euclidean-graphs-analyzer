@@ -5,15 +5,16 @@ from graph_painter import *
 
 import graph_file_manager as gfm
 import graph_test as test
-import graph_diagrams
 	
 if __name__ == "__main__":
 
-	#t1 = test.testNumberOfNodes(50, 501, 10, 0.1, 100)
-	#graph_diagrams.createPngForTestNumberOfNodes(t1, 50, 501, 0.1)
+	#Testing changing number of nodes. Radius is constant.
+	test.testNodes(startFrom = 100, endTo = 201, step = 10, radius = 0.1, numberOfTests = 100)
 	
-	t2 = test.testRadius(1, 10, 1, 100, 100)
-	graph_diagrams.createPngForTestRadius(t2, 0.1, 1, 100)
+	#Testing changing radius. Number of nodes is constant.
+	test.testRadius(startFrom = 1, endTo = 10, step = 1, numberOfNodes = 100, numberOfTests = 100)
+	
+	
 	
 	#print(test.test(1, 5000, 0.3))
 	
