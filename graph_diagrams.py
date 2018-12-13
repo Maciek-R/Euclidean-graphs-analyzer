@@ -1,5 +1,9 @@
 import pylab
 import os
+from mpl_toolkits import mplot3d
+import numpy as np
+from mpl_toolkits.mplot3d import axes3d
+import matplotlib.pyplot as plt
 
 picturesFolder = 'pictures/'
 
@@ -30,6 +34,15 @@ def createPngForTestRadius(tests, startFrom, endTo, noNodes):
 	fileName = picturesFolder + 'ConnectedR_' + str(startFrom) + '_' + str(endTo) + '_' + str(noNodes) + '.png'
 	createPng(radiuses, meanNumbersOfConnectedComponent, fileName, 'Liczba skladowych spojnych od promienia dla n = ' + str(noNodes))
 	
+def createPngForTestNodesAndRadius(tests):
+	numberOfNodes = list(map(lambda x: x[0], tests))
+	radiuses = list(map(lambda x: x[1], tests))
+	probabilities = list(map(lambda x: x[2], tests))
+	meanNumbersOfConnectedComponent = list(map(lambda x: x[3], tests))
+	
+	fileName = picturesFolder + '3D' + '.png'
+	createPng3D(numberOfNodes, radiuses, probabilities, fileName)
+	
 def createPng(axisX, axisY, fileName, title):
 	if not os.path.exists(picturesFolder):
 		os.makedirs(picturesFolder)
@@ -39,3 +52,14 @@ def createPng(axisX, axisY, fileName, title):
 	pylab.grid(True)
 	pylab.savefig(fileName)
 	print ('Png saved in file: ' + fileName)
+	
+def createPng3D(axisX, axisY, axisZ, fileName):
+	if not os.path.exists(picturesFolder):
+		os.makedirs(picturesFolder)
+	fig = plt.figure()
+	ax = fig.add_subplot(111, projection='3d')
+	ax.scatter(axisX, axisY, axisZ, c='r', marker='o')
+	ax.set_xlabel('Number of nodes')
+	ax.set_ylabel('Radius')
+	ax.set_zlabel('Probability')
+	plt.savefig(fileName)

@@ -8,3 +8,8 @@ def testNodes(startFrom, endTo, step, radius, numberOfTests):
 def testRadius(startFrom, endTo, step, numberOfNodes, numberOfTests):
 	t2 = test_generator.testRadius(startFrom, endTo, step, numberOfNodes, numberOfTests)
 	graph_diagrams.createPngForTestRadius(t2, startFrom*0.1,  endTo*0.1, numberOfNodes)
+	
+def testNodesAndRadius(startNodesFrom, endNodesTo, stepNodes, startRadiusFrom, endRadiusTo, stepRadius, numberOfTests):
+	t3 = test_generator.testNumberOfNodesAndRadius(startNodesFrom, endNodesTo, stepNodes, startRadiusFrom, endRadiusTo, stepRadius, numberOfTests)
+	graph_diagrams.createPngForTestNodesAndRadius(t3)
+	

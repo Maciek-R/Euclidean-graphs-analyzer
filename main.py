@@ -9,12 +9,13 @@ import graph_test as test
 if __name__ == "__main__":
 
 	#Testing changing number of nodes. Radius is constant.
-	test.testNodes(startFrom = 100, endTo = 201, step = 10, radius = 0.2, numberOfTests = 100)
+	#test.testNodes(startFrom = 100, endTo = 201, step = 10, radius = 0.2, numberOfTests = 100)
 	
 	#Testing changing radius. Number of nodes is constant.
-	test.testRadius(startFrom = 1, endTo = 10, step = 1, numberOfNodes = 100, numberOfTests = 100)
+	#test.testRadius(startFrom = 1, endTo = 10, step = 1, numberOfNodes = 100, numberOfTests = 100)
 	
-	
+	#Testing changing number of nodes and radius
+	test.testNodesAndRadius(startNodesFrom = 10, endNodesTo = 141, stepNodes = 1, startRadiusFrom = 1, endRadiusTo = 10, stepRadius = 1, numberOfTests = 10)
 	
 	#print(test.test(1, 5000, 0.3))
 	
