@@ -9,24 +9,36 @@
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{lmodern}
-
 \usepackage{amsmath}
 \usepackage{url}
 \usepackage{fancyhdr}
 \usepackage{footnote}
 \usepackage{float}
+
+% Kody źródłowe
+\usepackage{listings}
+
+% Algorytmy (pseudokod)
+\usepackage[algochapter,boxed,lined,linesnumbered]{algorithm2e}
+\renewcommand{\algorithmcfname}{Algorytm}
+
 % Kolory kodu
 \usepackage{xcolor}
+
 % Linki w~bibliografii
 \usepackage{url}
+
 % Przecinki zamiast kropek w~liczbach
 \usepackage{icomma}
-% Generalna typografia (automagia)
+
+% Generalna typografia
 \usepackage{microtype}
+
 \usepackage[unicode,pdfusetitle,bookmarksopen,bookmarksnumbered]{hyperref}
 \usepackage{graphicx}
 \usepackage{array}
 \usepackage[font=footnotesize,format=hang,labelfont=bf]{caption}
+
 % Wcięcie pierwszego akapitu każdej sekcji
 \usepackage{indentfirst}
 \newcommand{\HRule}[1]{\rule{\linewidth}{#1}}
@@ -39,18 +51,21 @@
 %%% Bibliografia
 % Zamiana cudzysłowów (dla biblatexa)
 \usepackage{csquotes}
+
 % Lepsza bibliografia
 \usepackage[backend=biber,style=numeric,sorting=nty,abbreviate=false,language=polish]{biblatex}
 \addbibresource{report.bib}
 \renewcommand*{\newunitpunct}{\addcomma\space}
 \DeclareQuoteAlias{croatian}{polish}
 
+\clubpenalty=10000
+\widowpenalty=10000
+
+
 \begin{document}
 %-------------------------------------------------------------------------------
-\title{ \normalsize \textsc{Grafy i Sieci\\Dokumentacja projektowa}
-		\\ [2.0cm]
-		\LARGE \textbf{Badanie właściwości grafów euklidesowych}
-		\\ [2.0cm]
+\title{ \normalsize \textsc{Grafy i~Sieci\\Dokumentacja projektowa} \\ [2.0cm]
+		\LARGE \textbf{Badanie właściwości grafów euklidesowych} \\ [2.0cm]
 		\normalsize \today \vspace*{3\baselineskip}}
 \date{}
 \author{Adam Kowalewski\\Maciej Ruszczyk}
@@ -59,9 +74,8 @@
 \newpage
 %-------------------------------------------------------------------------------
 
-\chapter{Wprowadzenie}
-
-Celem zadania projektowego było zaimplementowanie generatora sieci euklidesowych, a~następnie zbadanie prawdopodobieństwa spójności sieci i~określenie rozmiaru największej składowej spójnej w~zależności od liczby i~zasięgu wierzchołków. Zarówno generator, jak i~oprogramowanie weryfikujące zostaną napisane w~języku Python. Głównym źródłem wiedzy będzie książka autorstwa Jacka Wojciechowskiego i~Krzysztofa Pieńkosza ,,Grafy i~Sieci''.\cite{WojciechowskiJacek2013Gis}
+\include{wprowadzenie}
+\include{projekt_rozwiazania}
 
 \printbibliography[heading=bibintoc]
 
