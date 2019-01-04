@@ -1,22 +1,25 @@
 import random
 import math
+from typing import List
+
 from utils import *
 
-def generateGraph(numberOfNodes = 10, epsilonDistance = 0.5):
-	nodes = []
-	for id in range(numberOfNodes):
-		x = round(random.random(), 5)
-		y = round(random.random(), 5)
-		nodes.append(Node(x, y, id))
-	
-	edges = []
-	for i in range(len(nodes)):
-		node1 = nodes[i]
-		for node2 in nodes[i+1:]:
-			distance = distanceBetweenNodes(node1, node2)
-			if(distance <= epsilonDistance):
-				edges.append(Edge(node1, node2))
-				node1.addNeighbour(node2)
-				node2.addNeighbour(node1)
-				
-	return Graph(nodes, edges, epsilonDistance)
+
+def random_euclidean_graph(size: int = 10, radius: float = 0.5) -> Graph:
+    # Generate nodes placed randomly in [0.0; 1.0] x [0.0; 1.0] square
+    nodes: List[Node] = []
+    for i in range(size):
+        x = round(random.random(), ndigits=5)
+        y = round(random.random(), ndigits=5)
+        nodes.append(Node(x, y))
+
+    # Connect those nodes, which distance is less than or equal to radius
+    for i in range(len(nodes)):
+        node1 = nodes[i]
+        for node2 in nodes[i+1:]:
+            distance = nodes_distance(node1, node2)
+            if(distance <= radius):
+                node1.add_neighbour(node2)
+                node2.add_neighbour(node1)
+
+    return Graph(nodes)
