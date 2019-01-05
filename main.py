@@ -1,41 +1,103 @@
-from graph_generator import *
-import networkx as nx
-import matplotlib.pyplot as plt
-from graph_painter import *
+from argparse import ArgumentParser, ArgumentTypeError, Action
+import logging
+import numpy as np
+import sys
 
-import graph_file_manager as gfm
-import graph_test as test
-	
+from graph_test import GraphTester
+
+
+class SizeAction(Action):
+    def __call__(self, parser, namespace, values, option_string=None):
+        if values < 0:
+            parser.error("Size should be greater than zero")
+
+        setattr(namespace, self.dest, values)
+
+
+class RadiusAction(Action):
+    def __call__(self, parser, namespace, values, option_string=None):
+        if values < 0.0 or values > 1.0:
+            parser.error("Radius should be in range [0.0; 1.0]")
+
+        setattr(namespace, self.dest, values)
+
+
+def create_parser() -> ArgumentParser:
+    parser = ArgumentParser(description="Euclidean graphs test suite")
+
+    parser.add_argument("--start_size",
+                        action=SizeAction,
+                        type=int,
+                        metavar="SIZE",
+                        required=True,
+                        help="Size of the first graph")
+    parser.add_argument("--stop_size",
+                        action=SizeAction,
+                        type=int,
+                        metavar="SIZE",
+                        required=True,
+                        help="Size of the last graph")
+    parser.add_argument("--size_step",
+                        action="store",
+                        type=int,
+                        metavar="STEP",
+                        default=1,
+                        help="Step between graphs sizes. Default: 1")
+
+    parser.add_argument("--start_radius",
+                        action=RadiusAction,
+                        type=float,
+                        metavar="RADIUS",
+                        required=True,
+                        help="Radius of the first graph")
+    parser.add_argument("--stop_radius",
+                        action=RadiusAction,
+                        type=float,
+                        metavar="RADIUS",
+                        required=True,
+                        help="Radius of the last graph")
+    parser.add_argument("--radius_step",
+                        action="store",
+                        type=float,
+                        metavar="STEP",
+                        default=0.01,
+                        help="Step between graphs radiuses: Default: 0.01")
+
+    parser.add_argument("--repeats", "-r",
+                        action="store",
+                        type=int,
+                        metavar="COUNT",
+                        default=1,
+                        help="How many repeat tests for each graph type")
+    parser.add_argument("--output_dir", "-o",
+                        action="store",
+                        type=str,
+                        metavar="DIR",
+                        default="output/",
+                        help="Directory for output files: Default: 'output/'")
+    parser.add_argument("--verbose", "-v",
+                        action="store_true",
+                        help="Displays more messages")
+
+    return parser
+
+
 if __name__ == "__main__":
+    parser = create_parser()
+    args = parser.parse_args()
 
-	#Testing changing number of nodes. Radius is constant.
-	#test.testNodes(startFrom = 100, endTo = 201, step = 10, radius = 0.2, numberOfTests = 100)
-	
-	#Testing changing radius. Number of nodes is constant.
-	#test.testRadius(startFrom = 1, endTo = 10, step = 1, numberOfNodes = 100, numberOfTests = 100)
-	
-	#Testing changing number of nodes and radius
-	test.testNodesAndRadius(startNodesFrom = 10, endNodesTo = 141, stepNodes = 1, startRadiusFrom = 1, endRadiusTo = 10, stepRadius = 1, numberOfTests = 10)
-	
-	#print(test.test(1, 5000, 0.3))
-	
-	#graph = generateGraph(10, 0.45)
-	#print(graph)
-	#for node in graph.nodes:
-	#	print(list(map(lambda x: x.id, node.neighbours)))
-	
-	#g = preparePainterGraph(graph)
-	#drawPainterGraph(g)
-	
-	#print(graph.isConsistent())
-	#print(graph.getMaxSizeOfConnectedComponent())
-	#gfm.writeGraphToFile(graph)
-	
-	#graphReaded = gfm.readGraphFromFile(10, 0.5)
-	#for node in graphReaded.nodes:
-	#	print(list(map(lambda x: x.id, node.neighbours)))
-	
-	#g = preparePainterGraph(graphReaded)
-	#drawPainterGraph(g)
-		
-	#print(graphReaded)
+    log_level = logging.DEBUG if args.verbose else logging.INFO
+    logging.basicConfig(level=log_level)
+    logging.info("Initializing...")
+
+    sizes = range(args.start_size,
+                  args.stop_size + 1,
+                  args.size_step)
+    radiuses = np.arange(args.start_radius,
+                         args.stop_radius + sys.float_info.epsilon,
+                         args.radius_step)
+    tester = GraphTester(args.output_dir)
+
+    logging.info("Running test...")
+    tester.run(sizes, radiuses, args.repeats)
+    logging.info("Finished")
