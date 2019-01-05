@@ -9,13 +9,11 @@ ComponentsSizesSet = Dict[int, Dict[float, List[int]]]
 
 
 class GraphTester:
-    output_dir: str
     graph_generator: GraphGenerator
     log: logging.Logger
 
-    def __init__(self, output_dir: str) -> None:
-        self.output_dir = output_dir
-        self.graph_generator = GraphGenerator(output_dir)
+    def __init__(self, graph_generator: GraphGenerator) -> None:
+        self.graph_generator = graph_generator
         self.log = logging.getLogger("GraphTester")
 
         self.log.debug("Initialized")
@@ -32,12 +30,12 @@ class GraphTester:
                       radiuses[0], radiuses[-1], len(radiuses),
                       repeats)
 
-        graphs = self.generate_graphs(sizes, radiuses, repeats)
-        comps_sizes = self.max_components_sizes(graphs)
+        graphs = self.generate_graphs_set(sizes, radiuses, repeats)
+        comps_sizes = self.max_components_sizes_set(graphs)
 
-    def generate_graphs(self, sizes: Sequence[int],
-                        radiuses: Sequence[float],
-                        repeats: int) -> GraphsSet:
+    def generate_graphs_set(self, sizes: Sequence[int],
+                            radiuses: Sequence[float],
+                            repeats: int) -> GraphsSet:
         assert repeats >= 0
         self.log.info("Generating total %s graphs...",
                       len(sizes)*len(radiuses)*repeats)
@@ -46,13 +44,13 @@ class GraphTester:
         for size in sizes:
             graphs_subset = graphs_set[size] = {}
             for radius in radiuses:
-                graphs = self.graph_generator(size, radius, count=repeats)
+                graphs = self.graph_generator(size, radius, repeats)
                 graphs_subset[radius] = graphs
 
         return graphs_set
 
-    def max_components_sizes(self,
-                             graphs_set: GraphsSet) -> ComponentsSizesSet:
+    def max_components_sizes_set(self,
+                                 graphs_set: GraphsSet) -> ComponentsSizesSet:
         self.log.info("Calculating maximal components sizes...")
         comps_sizes_set: ComponentsSizesSet = {}
         for size, graph_subset in graphs_set.items():

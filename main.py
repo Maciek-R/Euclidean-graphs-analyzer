@@ -4,6 +4,7 @@ import numpy as np
 import sys
 
 from graph_test import GraphTester
+from graph_gen import GraphGenerator
 
 
 class SizeAction(Action):
@@ -90,13 +91,15 @@ if __name__ == "__main__":
     logging.basicConfig(level=log_level)
     logging.info("Initializing...")
 
+    generator = GraphGenerator(args.output_dir)
+    tester = GraphTester(generator)
+
     sizes = range(args.start_size,
                   args.stop_size + 1,
                   args.size_step)
     radiuses = np.arange(args.start_radius,
                          args.stop_radius + sys.float_info.epsilon,
                          args.radius_step)
-    tester = GraphTester(args.output_dir)
 
     logging.info("Running test...")
     tester.run(sizes, radiuses, args.repeats)

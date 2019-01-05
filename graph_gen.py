@@ -37,7 +37,8 @@ class GraphGenerator:
 
     def generate_one(self, size: int,
                      radius: float,
-                     index: int) -> Graph:
+                     index: int,
+                     ) -> Graph:
         assert size > 0
         assert radius >= 0.0 and radius <= 1.0
         assert index >= 0
@@ -96,13 +97,21 @@ class GraphGenerator:
         assert radius >= 0.0 and radius <= 1.0
 
         graph = Graph(size)
+        self.generate_graph_positions(graph)
+        self.connect_graph_adjacents(graph, radius)
+        return graph
 
-        self.log.debug("Generating nodes...")
+    def generate_graph_positions(self, graph: Graph) -> None:
+        self.log.debug("Generating positions...")
         for node in graph.nodes:
             node.x = round(random.random(), ndigits=5)
             node.y = round(random.random(), ndigits=5)
 
+    def connect_graph_adjacents(self, graph: Graph, radius: float) -> None:
+        assert radius >= 0.0 and radius <= 1.0
         self.log.debug("Connecting adjacents...")
+
+        radius_sq = radius*radius
         for u in range(len(graph.nodes)):
             u_node = graph.nodes[u]
             u_edges = graph.edges[u]
@@ -111,9 +120,7 @@ class GraphGenerator:
                 v_node = graph.nodes[v]
                 v_edges = graph.edges[v]
 
-                distance = nodes_distance(u_node, v_node)
-                if(distance <= radius):
+                distance_sq = nodes_distance_sq(u_node, v_node)
+                if(distance_sq <= radius_sq):
                     u_edges[v] = True
                     v_edges[u] = True
-
-        return graph

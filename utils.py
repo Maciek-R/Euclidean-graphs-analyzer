@@ -7,11 +7,15 @@ class Node:
     x: float
     y: float
 
+    def __init__(self, x: float = 0.0, y: float = 0.0) -> None:
+        self.x = x
+        self.y = y
 
-def nodes_distance(node1: Node, node2: Node):
+
+def nodes_distance_sq(node1: Node, node2: Node):
     dx = node2.x - node1.x
     dy = node2.y - node1.y
-    return math.sqrt(dx*dx + dy*dy)
+    return (dx*dx + dy*dy)
 
 
 class Graph:
