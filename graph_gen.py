@@ -19,9 +19,6 @@ class GraphGenerator:
         self.output_dir = output_dir
         self.log = logging.getLogger("GraphFactory")
 
-        # Set recursion limit for read-write operations on graphs
-        sys.setrecursionlimit(50000)
-
     def __call__(self, size: int,
                  radius: float,
                  count: int = 1) -> List[Graph]:
@@ -46,12 +43,15 @@ class GraphGenerator:
         assert index >= 0
 
         path = self.make_path(size, radius, index)
+
+        # Retrieve or generate a graph
         graph = self.read_graph(path)
         if graph is None:
             self.log.debug("Generating graph n=%s, r=%s (#%s)",
                            size, radius, index)
             graph = self.random_euclidean_graph(size, radius)
 
+        # Store it if is not yet
         if not path.is_file():
             self.write_graph(graph, path)
 
@@ -67,29 +67,27 @@ class GraphGenerator:
         size_str = str(size)
         radius_str = str(radius).replace('.', '_')
         index_str = str(index)
-        return Path('{}/{}-{}({}).graph'.format(self.output_dir,
-                                                size_str,
-                                                radius_str,
-                                                index_str))
+        return Path('{}/{}-{}({}).graph.gz'.format(self.output_dir,
+                                                   size_str,
+                                                   radius_str,
+                                                   index_str))
 
     def read_graph(self, path: Path) -> Optional[Graph]:
         if not path.is_file():
             return None
 
-        final_path = str(path) + ".gz"
-        self.log.debug("Reading graph file: %s...", final_path)
-        with gzip.open(final_path, 'rb') as ifile:
+        self.log.debug("Reading graph file: %s...", path)
+        with gzip.open(path, 'rb') as ifile:
             try:
                 graph = pickle.load(ifile)
                 return graph
             except pickle.UnpicklingError:
-                self.log.error("Could not read graph file: %s!", final_path)
+                self.log.error("Could not read graph file: %s!", path)
                 return None
 
     def write_graph(self, graph: Graph, path: Path) -> None:
-        final_path = str(path) + ".gz"
-        self.log.debug("Writing graph to file: %s...", final_path)
-        with gzip.open(final_path, 'wb') as ofile:
+        self.log.debug("Writing graph to file: %s...", path)
+        with gzip.open(path, 'wb') as ofile:
             pickle.dump(graph, ofile)
 
     def random_euclidean_graph(self, size: int = 10,
@@ -97,20 +95,25 @@ class GraphGenerator:
         assert size > 0
         assert radius >= 0.0 and radius <= 1.0
 
+        graph = Graph(size)
+
         self.log.debug("Generating nodes...")
-        nodes: List[Node] = []
-        for i in range(size):
-            x = round(random.random(), ndigits=5)
-            y = round(random.random(), ndigits=5)
-            nodes.append(Node(x, y))
+        for node in graph.nodes:
+            node.x = round(random.random(), ndigits=5)
+            node.y = round(random.random(), ndigits=5)
 
         self.log.debug("Connecting adjacents...")
-        for i in range(len(nodes)):
-            node1 = nodes[i]
-            for node2 in nodes[i+1:]:
-                distance = nodes_distance(node1, node2)
-                if(distance <= radius):
-                    node1.add_neighbour(node2)
-                    node2.add_neighbour(node1)
+        for u in range(len(graph.nodes)):
+            u_node = graph.nodes[u]
+            u_edges = graph.edges[u]
 
-        return Graph(nodes)
+            for v in range(len(graph.nodes))[u+1:]:
+                v_node = graph.nodes[v]
+                v_edges = graph.edges[v]
+
+                distance = nodes_distance(u_node, v_node)
+                if(distance <= radius):
+                    u_edges[v] = True
+                    v_edges[u] = True
+
+        return graph

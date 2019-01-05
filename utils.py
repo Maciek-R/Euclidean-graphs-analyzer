@@ -4,18 +4,8 @@ from typing import List, Set, Dict
 
 
 class Node:
-    neighbours: List['Node']
     x: float
     y: float
-
-    def __init__(self, x: float, y: float) -> None:
-        self.x = x
-        self.y = y
-        self.neighbours = []
-
-    def add_neighbour(self, node: 'Node'):
-        assert node not in self.neighbours
-        self.neighbours.append(node)
 
 
 def nodes_distance(node1: Node, node2: Node):
@@ -26,34 +16,40 @@ def nodes_distance(node1: Node, node2: Node):
 
 class Graph:
     nodes: List[Node]
+    edges: List[List[bool]]
 
-    def __init__(self, nodes: List[Node] = []) -> None:
-        self.nodes = nodes
+    def __init__(self, size: int) -> None:
+        assert size >= 0
+
+        self.nodes = [Node()] * size
+        self.edges = [[False] * size] * size
 
     def max_component_size(self) -> int:
-        stack: List[Node] = []
-        visited: Set[Node] = set()
+        stack: List[int] = []
+        visited: List[bool] = [False] * len(self.nodes)
         max_size = 0
 
-        for node in self.nodes:
-            if node in visited:
+        for u in range(len(self.nodes)):
+            if visited[u]:
                 continue
 
             size = 1
-            visited.add(node)
-            stack.append(node)
+            visited[u] = True
+            stack.append(u)
             while stack:
-                next_node = stack.pop()
-                if next_node in visited:
-                    continue
+                v = stack.pop()
+                v_edges = self.edges[v]
 
-                for neighbour in next_node.neighbours:
-                    if neighbour in visited:
+                for k in range(len(self.nodes)):
+                    if visited[k]:
+                        continue
+
+                    if not v_edges[k]:  # Not a neighbour
                         continue
 
                     size += 1
-                    visited.add(neighbour)
-                    stack.append(neighbour)
+                    visited[k] = True
+                    stack.append(k)
 
             if size > max_size:
                 max_size = size
