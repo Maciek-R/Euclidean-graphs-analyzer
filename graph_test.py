@@ -1,26 +1,29 @@
-from typing import Sequence, TypeVar, Dict
+from typing import Sequence, Dict, Optional
+from multiprocessing import Pool
 import logging
 
-from utils import *
+from common import *
 from graph_gen import GraphGenerator
-
-GraphsSet = Dict[int, Dict[float, List[Graph]]]
-ComponentsSizesSet = Dict[int, Dict[float, List[int]]]
+from graph_analyze import GraphAnalyzer
 
 
 class GraphTester:
     graph_generator: GraphGenerator
+    graph_analyzer: GraphAnalyzer
     log: logging.Logger
 
-    def __init__(self, graph_generator: GraphGenerator) -> None:
+    def __init__(self, graph_generator: GraphGenerator,
+                 graph_analyzer: GraphAnalyzer) -> None:
         self.graph_generator = graph_generator
+        self.graph_analyzer = graph_analyzer
         self.log = logging.getLogger("GraphTester")
 
         self.log.debug("Initialized")
 
     def run(self, sizes: Sequence[int],
             radiuses: Sequence[float],
-            repeats: int = 1) -> None:
+            repeats: int = 1,
+            pool: Optional[Pool] = None) -> None:
         assert repeats >= 0
         self.log.info("Running graphs tests:"
                       " sizes from %s to %s (total %s),"
@@ -30,35 +33,5 @@ class GraphTester:
                       radiuses[0], radiuses[-1], len(radiuses),
                       repeats)
 
-        graphs = self.generate_graphs_set(sizes, radiuses, repeats)
-        comps_sizes = self.max_components_sizes_set(graphs)
-
-    def generate_graphs_set(self, sizes: Sequence[int],
-                            radiuses: Sequence[float],
-                            repeats: int) -> GraphsSet:
-        assert repeats >= 0
-        self.log.info("Generating total %s graphs...",
-                      len(sizes)*len(radiuses)*repeats)
-
-        graphs_set: GraphsSet = {}
-        for size in sizes:
-            graphs_subset = graphs_set[size] = {}
-            for radius in radiuses:
-                graphs = self.graph_generator(size, radius, repeats)
-                graphs_subset[radius] = graphs
-
-        return graphs_set
-
-    def max_components_sizes_set(self,
-                                 graphs_set: GraphsSet) -> ComponentsSizesSet:
-        self.log.info("Calculating maximal components sizes...")
-        comps_sizes_set: ComponentsSizesSet = {}
-        for size, graph_subset in graphs_set.items():
-            comps_sizes_subset = comps_sizes_set[size] = {}
-            for radius, graphs in graph_subset.items():
-                self.log.debug("Calculating max components sizes for graphs"
-                               " n: %s, r: %s", size, radius)
-                comps_sizes = [g.max_component_size() for g in graphs]
-                comps_sizes_subset[radius] = comps_sizes
-
-        return comps_sizes_set
+        graphs_set = self.graph_generator(sizes, radiuses, repeats)
+        comps_sizes_set = self.graph_analyzer(graphs_set, pool)

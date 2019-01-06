@@ -120,3 +120,4 @@ dmypy.json
 # Other
 pictures/
 data/
+output*/

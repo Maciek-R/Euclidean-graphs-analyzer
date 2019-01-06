@@ -1,27 +1,39 @@
 import random
 import math
 import logging
-import os.path
-import pickle
-import sys
-import gzip
-from pathlib import Path
-from typing import Sequence, TypeVar, Dict, Optional
+from typing import Sequence
 
-from utils import *
+from common import *
+from graph_loader import GraphLoader
 
 
 class GraphGenerator:
-    output_dir: str
+    loader: GraphLoader
     log: logging.Logger
 
-    def __init__(self, output_dir: str) -> None:
-        self.output_dir = output_dir
-        self.log = logging.getLogger("GraphFactory")
+    def __init__(self, loader: GraphLoader) -> None:
+        self.loader = loader
+        self.log = logging.getLogger("GraphGenerator")
 
-    def __call__(self, size: int,
-                 radius: float,
-                 count: int = 1) -> List[Graph]:
+    def __call__(self, sizes: Sequence[int],
+                 radiuses: Sequence[float],
+                 repeats: int) -> GraphsSet:
+        assert repeats >= 0
+        self.log.info("Generating total %s graphs...",
+                      len(sizes)*len(radiuses)*repeats)
+
+        graphs_set: GraphsSet = {}
+        for size in sizes:
+            graphs_subset = graphs_set[size] = {}
+            for radius in radiuses:
+                graphs = self.generate_graphs(size, radius, repeats)
+                graphs_subset[radius] = graphs
+
+        return graphs_set
+
+    def generate_graphs(self, size: int,
+                        radius: float,
+                        count: int = 1) -> List[Graph]:
         assert size > 0
         assert radius >= 0.0 and radius <= 1.0
         assert count > 0
@@ -37,59 +49,20 @@ class GraphGenerator:
 
     def generate_one(self, size: int,
                      radius: float,
-                     index: int,
-                     ) -> Graph:
+                     index: int) -> Graph:
         assert size > 0
         assert radius >= 0.0 and radius <= 1.0
         assert index >= 0
 
-        path = self.make_path(size, radius, index)
-
-        # Retrieve or generate a graph
-        graph = self.read_graph(path)
+        # Retrieve or (if not present/or corrupted) generate a new graph
+        graph = self.loader.try_read_graph(size, radius, index)
         if graph is None:
-            self.log.debug("Generating graph n=%s, r=%s (#%s)",
+            self.log.debug("Generating graph n=%s, r=%s (#%s)...",
                            size, radius, index)
             graph = self.random_euclidean_graph(size, radius)
 
-        # Store it if is not yet
-        if not path.is_file():
-            self.write_graph(graph, path)
-
-        assert graph is not None
+        self.loader.write_graph(size, radius, index, graph)
         return graph
-
-    def make_path(self, size: int, radius: float, index: int) -> Path:
-        assert size > 0
-        assert radius >= 0.0 and radius <= 1.0
-        assert index >= 0
-
-        # Resulted path will be like: '<size>-<radius>(index).graph'
-        size_str = str(size)
-        radius_str = str(radius).replace('.', '_')
-        index_str = str(index)
-        return Path('{}/{}-{}({}).graph.gz'.format(self.output_dir,
-                                                   size_str,
-                                                   radius_str,
-                                                   index_str))
-
-    def read_graph(self, path: Path) -> Optional[Graph]:
-        if not path.is_file():
-            return None
-
-        self.log.debug("Reading graph file: %s...", path)
-        with gzip.open(path, 'rb') as ifile:
-            try:
-                graph = pickle.load(ifile)
-                return graph
-            except pickle.UnpicklingError:
-                self.log.error("Could not read graph file: %s!", path)
-                return None
-
-    def write_graph(self, graph: Graph, path: Path) -> None:
-        self.log.debug("Writing graph to file: %s...", path)
-        with gzip.open(path, 'wb') as ofile:
-            pickle.dump(graph, ofile)
 
     def random_euclidean_graph(self, size: int = 10,
                                radius: float = 0.5) -> Graph:

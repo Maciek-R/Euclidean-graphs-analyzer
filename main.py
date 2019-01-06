@@ -1,10 +1,13 @@
 from argparse import ArgumentParser, ArgumentTypeError, Action
+from multiprocessing import Pool
 import logging
 import numpy as np
 import sys
 
 from graph_test import GraphTester
 from graph_gen import GraphGenerator
+from graph_loader import GraphLoader
+from graph_analyze import GraphAnalyzer
 
 
 class SizeAction(Action):
@@ -91,8 +94,10 @@ if __name__ == "__main__":
     logging.basicConfig(level=log_level)
     logging.info("Initializing...")
 
-    generator = GraphGenerator(args.output_dir)
-    tester = GraphTester(generator)
+    loader = GraphLoader(args.output_dir)
+    generator = GraphGenerator(loader)
+    analyzer = GraphAnalyzer(args.output_dir)
+    tester = GraphTester(generator, analyzer)
 
     sizes = range(args.start_size,
                   args.stop_size + 1,
@@ -101,6 +106,7 @@ if __name__ == "__main__":
                          args.stop_radius + sys.float_info.epsilon,
                          args.radius_step)
 
-    logging.info("Running test...")
-    tester.run(sizes, radiuses, args.repeats)
-    logging.info("Finished")
+    with Pool() as pool:
+        logging.info("Running test...")
+        tester.run(sizes, radiuses, args.repeats, pool)
+        logging.info("Finished")
