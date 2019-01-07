@@ -23,36 +23,31 @@ class GraphAnalyzer:
 
     def __call__(self, sizes: Sequence[int],
                  radiuses: Sequence[float],
-                 repeats: int,
+                 count: int,
                  pool: Pool) -> ComponentsSizesSet:
-        self.log.debug("Generating graphs...")
-        graphs_set = self.generator(sizes, radiuses, repeats)
-        comps_sizes_set = self.calc_max_comps_sizes(graphs_set, pool)
-        return comps_sizes_set
-
-    def calc_max_comps_sizes(self,
-                             graphs_set: GraphsSet,
-                             pool: Pool) -> ComponentsSizesSet:
-        self.log.debug("Retrieving maximal components sizes...")
+        assert count >= 0
+        self.log.debug("Performing analysis...")
 
         comps_sizes_set = self.load_max_comps_sizes()
         try:
-            for size, graph_subset in graphs_set.items():
+            for size in sizes:
+                assert size > 0
                 if size not in comps_sizes_set:
                     comps_sizes_set[size] = {}
                 comps_sizes_subset = comps_sizes_set[size]
 
-                for radius, graphs in graph_subset.items():
+                for radius in radiuses:
+                    assert radius >= 0.0 and radius <= 1.0
                     if radius not in comps_sizes_subset:
                         comps_sizes_subset[radius] = []
                     comps_sizes = comps_sizes_subset[radius]
 
+                    graphs = self.generator(size, radius, count, pool)
                     if len(graphs) > len(comps_sizes):
                         idx_from, idx_to = len(comps_sizes), len(graphs)
                         self.log.debug("Calculating max components sizes for"
-                                       " graphs n: %s, r: %s, #: %s-%s",
+                                       " graphs n: %s, r: %s, #: %s-%s...",
                                        size, radius, idx_from, idx_to)
-
                         comps_sizes += pool.map(Graph.max_component_size,
                                                 graphs[idx_from:idx_to])
         finally:
@@ -75,5 +70,4 @@ class GraphAnalyzer:
         self.log.debug("Saving maximal components size to file...")
         path = Path(self.output_dir + "/max_comps_size.json")
         with open(path, "w") as ofile:
-            return json.dump(comps_sizes_set, ofile,
-                             indent=4, ensure_ascii=True)
+            return json.dump(comps_sizes_set, ofile)

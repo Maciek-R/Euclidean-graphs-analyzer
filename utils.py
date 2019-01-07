@@ -18,18 +18,18 @@ def nodes_distance_sq(node1: Node, node2: Node):
 
 class Graph:
     nodes: List[Node]
-    edges: List[List[bool]]
+    edges: List[bytearray]
 
     def __init__(self, size: int) -> None:
         assert size >= 0
 
         self.nodes = [Node() for _ in range(size)]
-        self.edges = [[False for _ in range(size)] for _ in range(size)]
+        self.edges = [bytearray(size) for _ in range(size)]
 
     def max_component_size(self) -> int:
         nodes_len = len(self.nodes)
         stack: List[int] = []
-        visited: List[bool] = [False for _ in range(nodes_len)]
+        visited = [False]*nodes_len
         max_size = 0
 
         for u in range(nodes_len):

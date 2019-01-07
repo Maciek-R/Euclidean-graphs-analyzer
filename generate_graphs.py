@@ -4,9 +4,8 @@ import logging
 import numpy as np
 import sys
 
-from graph_gen import GraphGenerator
 from graph_db import GraphDatabase
-from graph_analyze import GraphAnalyzer
+from graph_gen import GraphGenerator
 
 
 class SizeAction(Action):
@@ -97,7 +96,6 @@ if __name__ == "__main__":
     output_dir = args.output_dir
     db = GraphDatabase(output_dir)
     generator = GraphGenerator(db)
-    analyzer = GraphAnalyzer(output_dir, generator)
 
     sizes = range(args.start_size,
                   args.stop_size + 1,
@@ -107,6 +105,12 @@ if __name__ == "__main__":
                          args.radius_step)
 
     with Pool() as pool:
-        logging.info("Running test...")
-        analyzer(sizes, radiuses, args.repeats, pool)
+        logging.info("Generating graphs...")
+        repeats = args.repeats
+        for size in sizes:
+            assert size > 0
+            for radius in radiuses:
+                assert radius >= 0.0 and radius <= 1.0
+                generator(size, radius, repeats, pool)
+
         logging.info("Finished")
