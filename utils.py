@@ -23,15 +23,16 @@ class Graph:
     def __init__(self, size: int) -> None:
         assert size >= 0
 
-        self.nodes = [Node()] * size
-        self.edges = [[False] * size] * size
+        self.nodes = [Node() for _ in range(size)]
+        self.edges = [[False for _ in range(size)] for _ in range(size)]
 
     def max_component_size(self) -> int:
+        nodes_len = len(self.nodes)
         stack: List[int] = []
-        visited: List[bool] = [False] * len(self.nodes)
+        visited: List[bool] = [False for _ in range(nodes_len)]
         max_size = 0
 
-        for u in range(len(self.nodes)):
+        for u in range(nodes_len):
             if visited[u]:
                 continue
 
@@ -42,11 +43,10 @@ class Graph:
                 v = stack.pop()
                 v_edges = self.edges[v]
 
-                for k in range(len(self.nodes)):
-                    if visited[k]:
-                        continue
-
+                for k in range(nodes_len):
                     if not v_edges[k]:  # Not a neighbour
+                        continue
+                    if visited[k]:
                         continue
 
                     size += 1

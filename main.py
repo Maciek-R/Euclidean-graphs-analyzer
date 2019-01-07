@@ -4,7 +4,6 @@ import logging
 import numpy as np
 import sys
 
-from graph_test import GraphTester
 from graph_gen import GraphGenerator
 from graph_loader import GraphLoader
 from graph_analyze import GraphAnalyzer
@@ -91,13 +90,14 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     log_level = logging.DEBUG if args.verbose else logging.INFO
-    logging.basicConfig(level=log_level)
+    FORMAT = "%(asctime)s - %(levelname)s - %(name)s - %(message)s"
+    logging.basicConfig(level=log_level, format=FORMAT)
     logging.info("Initializing...")
 
-    loader = GraphLoader(args.output_dir)
+    output_dir = args.output_dir
+    loader = GraphLoader(output_dir)
     generator = GraphGenerator(loader)
-    analyzer = GraphAnalyzer(args.output_dir)
-    tester = GraphTester(generator, analyzer)
+    analyzer = GraphAnalyzer(output_dir, generator)
 
     sizes = range(args.start_size,
                   args.stop_size + 1,
@@ -108,5 +108,5 @@ if __name__ == "__main__":
 
     with Pool() as pool:
         logging.info("Running test...")
-        tester.run(sizes, radiuses, args.repeats, pool)
+        analyzer(sizes, radiuses, args.repeats, pool)
         logging.info("Finished")

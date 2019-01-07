@@ -64,8 +64,7 @@ class GraphGenerator:
         self.loader.write_graph(size, radius, index, graph)
         return graph
 
-    def random_euclidean_graph(self, size: int = 10,
-                               radius: float = 0.5) -> Graph:
+    def random_euclidean_graph(self, size: int, radius: float) -> Graph:
         assert size > 0
         assert radius >= 0.0 and radius <= 1.0
 
@@ -77,8 +76,8 @@ class GraphGenerator:
     def generate_graph_positions(self, graph: Graph) -> None:
         self.log.debug("Generating positions...")
         for node in graph.nodes:
-            node.x = round(random.random(), ndigits=5)
-            node.y = round(random.random(), ndigits=5)
+            node.x = round(random.random())
+            node.y = round(random.random())
 
     def connect_graph_adjacents(self, graph: Graph, radius: float) -> None:
         assert radius >= 0.0 and radius <= 1.0
