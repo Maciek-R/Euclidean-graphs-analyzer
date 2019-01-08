@@ -26,7 +26,7 @@ class RadiusAction(Action):
 
 
 def create_parser() -> ArgumentParser:
-    parser = ArgumentParser(description="Euclidean graphs test suite")
+    parser = ArgumentParser(description="Euclidean graphs test analyzer")
 
     parser.add_argument("--start_size",
                         action=SizeAction,
@@ -63,8 +63,8 @@ def create_parser() -> ArgumentParser:
                         action="store",
                         type=float,
                         metavar="STEP",
-                        default=0.01,
-                        help="Step between graphs radiuses: Default: 0.01")
+                        default=0.1,
+                        help="Step between graphs radiuses: Default: 0.1")
 
     parser.add_argument("--repeats", "-r",
                         action="store",
@@ -76,8 +76,8 @@ def create_parser() -> ArgumentParser:
                         action="store",
                         type=str,
                         metavar="DIR",
-                        default="output/",
-                        help="Directory for output files: Default: 'output/'")
+                        default="./",
+                        help="Directory for output files: Default: './'")
     parser.add_argument("--verbose", "-v",
                         action="store_true",
                         help="Displays more messages")

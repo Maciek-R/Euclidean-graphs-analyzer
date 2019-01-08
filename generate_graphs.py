@@ -25,7 +25,7 @@ class RadiusAction(Action):
 
 
 def create_parser() -> ArgumentParser:
-    parser = ArgumentParser(description="Euclidean graphs test suite")
+    parser = ArgumentParser(description="Euclidean graphs generator")
 
     parser.add_argument("--start_size",
                         action=SizeAction,
@@ -62,21 +62,21 @@ def create_parser() -> ArgumentParser:
                         action="store",
                         type=float,
                         metavar="STEP",
-                        default=0.01,
-                        help="Step between graphs radiuses: Default: 0.01")
+                        default=0.1,
+                        help="Step between graphs radiuses: Default: 0.1")
 
     parser.add_argument("--repeats", "-r",
                         action="store",
                         type=int,
                         metavar="COUNT",
                         default=1,
-                        help="How many repeat tests for each graph type")
+                        help="How many graphs generate for each type")
     parser.add_argument("--output_dir", "-o",
                         action="store",
                         type=str,
                         metavar="DIR",
-                        default="output/",
-                        help="Directory for output files: Default: 'output/'")
+                        default='./',
+                        help="Directory for output files: Default: './'")
     parser.add_argument("--verbose", "-v",
                         action="store_true",
                         help="Displays more messages")
@@ -111,7 +111,7 @@ if __name__ == "__main__":
             assert size > 0
             for radius in radiuses:
                 assert radius >= 0.0 and radius <= 1.0
-                args = [(size, radius, index) for index in range(repeats)]
-                pool.starmap(generator, args)
+                gen_args = [(size, radius, index) for index in range(repeats)]
+                pool.starmap(generator, gen_args)
 
         logging.info("Finished")
