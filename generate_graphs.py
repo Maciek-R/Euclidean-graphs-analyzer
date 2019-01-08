@@ -111,6 +111,7 @@ if __name__ == "__main__":
             assert size > 0
             for radius in radiuses:
                 assert radius >= 0.0 and radius <= 1.0
-                generator(size, radius, repeats, pool)
+                args = [(size, radius, index) for index in range(repeats)]
+                pool.starmap(generator, args)
 
         logging.info("Finished")

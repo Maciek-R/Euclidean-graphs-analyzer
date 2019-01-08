@@ -42,14 +42,13 @@ class GraphAnalyzer:
                         comps_sizes_subset[radius] = []
                     comps_sizes = comps_sizes_subset[radius]
 
-                    graphs = self.generator(size, radius, count, pool)
-                    if len(graphs) > len(comps_sizes):
-                        idx_from, idx_to = len(comps_sizes), len(graphs)
-                        self.log.debug("Calculating max components sizes for"
-                                       " graphs n: %s, r: %s, #: %s-%s...",
-                                       size, radius, idx_from, idx_to)
-                        comps_sizes += pool.map(Graph.max_component_size,
-                                                graphs[idx_from:idx_to])
+                    if len(comps_sizes) > count:
+                        continue
+
+                    for index in range(len(comps_sizes), count):
+                        graph = self.generator(size, radius, index)
+                        comp_size = graph.max_component_size()
+                        comps_sizes.append(comp_size)
         finally:
             self.save_max_comps_sizes(comps_sizes_set)
 

@@ -2,7 +2,6 @@ import random
 import math
 import logging
 from typing import Sequence
-from multiprocessing import Pool
 
 from common import *
 from graph_db import GraphDatabase
@@ -42,23 +41,23 @@ class GraphGenerator:
 
     def __init__(self, db: GraphDatabase) -> None:
         self.db = db
-        self.log = logging.getLogger("GraphGenerator")
+
+    @property
+    def logger(self):
+        return logging.getLogger("GraphGenerator")
 
     def __call__(self, size: int,
                  radius: float,
-                 count: int,
-                 pool: Pool) -> List[Graph]:
+                 index: int) -> Graph:
         assert size > 0
         assert radius >= 0.0 and radius <= 1.0
-        assert count > 0
+        assert index >= 0
 
-        graphs = self.db.try_read_graphs(size, radius, count, pool)
-        diff = (count - len(graphs))
-        if diff > 0:
-            self.log.debug("Generating %s graphs of size: %s, radius: %s...",
-                           diff, size, radius)
-            graphs += pool.starmap(random_euclidean_graph,
-                                   [(size, radius)] * diff)
-            self.db.write_graphs(size, radius, graphs, pool)
+        graph = self.db.try_read_graph(size, radius, index)
+        if graph is None:
+            self.logger.debug("Generating graph, n=%s, r=%s (#%s)...",
+                              size, radius, index)
+            graph = random_euclidean_graph(size, radius)
+            self.db.write_graph(size, radius, index, graph)
 
-        return graphs
+        return graph
