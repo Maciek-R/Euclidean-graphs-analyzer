@@ -24,6 +24,14 @@ class RadiusAction(Action):
         setattr(namespace, self.dest, values)
 
 
+class JobsAction(Action):
+    def __call__(self, parser, namespace, values, option_string=None):
+        if values < 0:
+            parser.error("Jobs number should be greater than zero")
+
+        setattr(namespace, self.dest, values)
+
+
 def create_parser() -> ArgumentParser:
     parser = ArgumentParser(description="Euclidean graphs generator")
 
@@ -71,6 +79,12 @@ def create_parser() -> ArgumentParser:
                         metavar="COUNT",
                         default=1,
                         help="How many graphs generate for each type")
+    parser.add_argument("--jobs", "-j",
+                        action=JobsAction,
+                        type=int,
+                        metavar="N",
+                        default="1",
+                        help="How many threads use to work. Default: 1")
     parser.add_argument("--output_dir", "-o",
                         action="store",
                         type=str,
@@ -104,8 +118,10 @@ if __name__ == "__main__":
                          args.stop_radius + sys.float_info.epsilon,
                          args.radius_step)
 
-    with Pool() as pool:
-        logging.info("Generating graphs...")
+    with Pool(args.jobs) as pool:
+        logging.info("Generating graphs using %s processes...",
+                     pool._processes)
+
         repeats = args.repeats
         for size in sizes:
             assert size > 0
