@@ -1,3 +1,5 @@
+"""Program to perform analysis on a set of random euclidean graphs
+"""
 from argparse import ArgumentParser, ArgumentTypeError, Action
 from multiprocessing import Pool
 import logging
@@ -10,6 +12,12 @@ from graph_analyze import GraphAnalyzer
 
 
 class SizeAction(Action):
+
+    """Action handler for ArgumentParser when 'size' argument is provided
+    When called, it checks, if given size is greater than zero.
+    If not, it raises an error back to ArgumentParser
+    """
+
     def __call__(self, parser, namespace, values, option_string=None):
         if values < 0:
             parser.error("Size should be greater than zero")
@@ -18,6 +26,12 @@ class SizeAction(Action):
 
 
 class RadiusAction(Action):
+
+    """Action handler for ArgumentParser when 'radius' argument is provided
+    When called, it checks, if given radius is in square [0.0;0.0]x[1.0;1.0]
+    If not, it raises an error back to ArgumentParser
+    """
+
     def __call__(self, parser, namespace, values, option_string=None):
         if values < 0.0 or values > 1.0:
             parser.error("Radius should be in range [0.0; 1.0]")
@@ -26,14 +40,25 @@ class RadiusAction(Action):
 
 
 class JobsAction(Action):
+
+    """Action handler for ArgumentParser when 'jobs' argument is provided
+    When called, it checks, if given jobs number is greater than zero
+    If not, it raises an error back to ArgumentParser
+    """
+
     def __call__(self, parser, namespace, values, option_string=None):
-        if values < 0:
+        if values <= 0:
             parser.error("Jobs number should be greater than zero")
 
         setattr(namespace, self.dest, values)
 
 
 def create_parser() -> ArgumentParser:
+    """Creates command line argument parser
+
+    Returns:
+        ArgumentParser
+    """
     parser = ArgumentParser(description="Euclidean graphs test analyzer")
 
     parser.add_argument("--start_size",
@@ -99,7 +124,11 @@ def create_parser() -> ArgumentParser:
     return parser
 
 
-if __name__ == "__main__":
+def main():
+    """Main program routine.
+    Parses command line arguments via ArgumentParser, initializes logger,
+    creates utilities classes and performs analysis on given set of graphs
+    """
     parser = create_parser()
     args = parser.parse_args()
 
@@ -125,3 +154,7 @@ if __name__ == "__main__":
                      pool._processes)
         analyzer(sizes, radiuses, args.repeats, pool)
         logging.info("Finished")
+
+
+if __name__ == "__main__":
+    main()
