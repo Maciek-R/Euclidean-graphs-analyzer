@@ -10,6 +10,7 @@ import sys
 from graph_gen import GraphGenerator
 from graph_db import GraphDatabase
 from graph_analyze import GraphAnalyzer
+import results_plot
 
 
 class SizeAction(Action):
@@ -132,6 +133,12 @@ def create_parser() -> ArgumentParser:
                         metavar="DIR",
                         default=Path("./"),
                         help="Directory for output files: Default: './'")
+    parser.add_argument("--plot_type",
+                        action="store",
+                        type=str,
+                        choices=["CSV", "PNG"],
+                        default=None,
+                        help="If specified, specifies type of plot to make")
     parser.add_argument("--verbose", "-v",
                         action="store_true",
                         help="Displays more messages")
@@ -153,9 +160,11 @@ def main():
     logging.info("Initializing...")
 
     output_dir = args.output_dir
+    plot_type = args.plot_type
     db = GraphDatabase(output_dir)
     generator = GraphGenerator(db)
     analyzer = GraphAnalyzer(output_dir, generator)
+    plotter = results_plot.plotter(plot_type, output_dir)
 
     sizes = range(args.start_size,
                   args.stop_size + 1,
@@ -167,7 +176,8 @@ def main():
     with Pool(args.jobs) as pool:
         logging.info("Running test using %s processes...",
                      pool._processes)
-        analyzer(sizes, radiuses, args.repeats, pool)
+        results_set = analyzer(sizes, radiuses, args.repeats, pool)
+        plotter.plot(results_set)
         logging.info("Finished")
 
 
