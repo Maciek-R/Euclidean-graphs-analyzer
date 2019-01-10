@@ -23,20 +23,21 @@ class GraphAnalyzer:
 
     Attributes:
         generator (GraphGenerator): graph generator
-        output_dir (str): directory location for cached results
+        output_dir (Path): directory location for cached results
     """
 
     generator: GraphGenerator
-    output_dir: str
+    output_dir: Path
 
-    def __init__(self, output_dir: str, generator: GraphGenerator) -> None:
+    def __init__(self, output_dir: Path, generator: GraphGenerator) -> None:
         """Constructor
         Initializes attributes
 
         Args:
-            output_dir (str): directory location for cached results
+            output_dir (Path): directory location for cached results
             generator (GraphGenerator): graph generator
         """
+        assert output_dir.is_dir()
         self.generator = generator
         self.output_dir = output_dir
 
@@ -140,7 +141,7 @@ class GraphAnalyzer:
         Returns:
             ComponentsSizesSet: analysis results
         """
-        path = Path(self.output_dir + "/max_comps_size.json")
+        path = Path.joinpath(self.output_dir, 'max_comps_size.json')
         if not path.is_file():
             self.logger.warn("There is no results cache file: %s", path)
             return {}
@@ -157,7 +158,7 @@ class GraphAnalyzer:
         Args:
             comps_sizes_set (ComponentsSizesSet): analysis results
         """
-        path = Path(self.output_dir + "/max_comps_size.json")
+        path = Path.joinpath(self.output_dir, 'max_comps_size.json')
         self.logger.debug("Saving results to file %s..., path")
         with open(path, "w") as ofile:
             return json.dump(comps_sizes_set, ofile)

@@ -27,18 +27,19 @@ class GraphDatabase:
     every graph on the hard drive.
 
     Attributes:
-        output_dir (str): Description
+        output_dir (Path): Description
     """
 
-    output_dir: str
+    output_dir: Path
 
-    def __init__(self, output_dir: str) -> None:
-        """Constructor
+    def __init__(self, output_dir: Path) -> None:
+        """ConPathuctor
         Initializes attributes
 
         Args:
-            output_dir (str): path to graph database directory
+            output_dir (Path): path to graph database directory
         """
+        assert output_dir.is_dir()
         self.output_dir = output_dir
 
     @property
@@ -121,7 +122,7 @@ class GraphDatabase:
         """
         size_str = str(size)
         radius_str = str(radius).replace('.', '_')
-        return Path('{}/{}-{}({}).graph.gz'.format(self.output_dir,
-                                                   size_str,
-                                                   radius_str,
-                                                   index))
+        filename = Path('{}-{}({}).graph.gz'.format(size_str,
+                                                    radius_str,
+                                                    index))
+        return Path.joinpath(self.output_dir, filename)

@@ -2,6 +2,7 @@
 """
 from argparse import ArgumentParser, ArgumentTypeError, Action
 from multiprocessing import Pool
+from pathlib import Path
 import logging
 import numpy as np
 import sys
@@ -49,6 +50,20 @@ class JobsAction(Action):
     def __call__(self, parser, namespace, values, option_string=None):
         if values <= 0:
             parser.error("Jobs number should be greater than zero")
+
+        setattr(namespace, self.dest, values)
+
+
+class OutputDirAction(Action):
+
+    """Action handler for ArgumentParser when 'output_dir' argument is provided
+    When called, it checks, if given path is a valid directory
+    If not, it raises an error back to ArgumentParser
+    """
+
+    def __call__(self, parser, namespace, values, option_string=None):
+        if not values.is_dir():
+            parser.error("Output directory invalid")
 
         setattr(namespace, self.dest, values)
 
@@ -112,10 +127,10 @@ def create_parser() -> ArgumentParser:
                         default="1",
                         help="How many threads use to work. Default: 1")
     parser.add_argument("--output_dir", "-o",
-                        action="store",
-                        type=str,
+                        action=OutputDirAction,
+                        type=Path,
                         metavar="DIR",
-                        default="./",
+                        default=Path("./"),
                         help="Directory for output files: Default: './'")
     parser.add_argument("--verbose", "-v",
                         action="store_true",
