@@ -1,0 +1,8 @@
+%!TEX root = ./report.tex
+
+\chapter{Wprowadzone zmiany}
+
+	\section{Zmiany wprowadzone względem poprzedniej wersji dokumentacji}
+		\label{zmiany:zmiana}
+		
+		Jedną z istotnych zmian jakie zostały wprowadzone do aplikacji to zmiana struktury grafu. Na początku zakładaliśmy, że każdy wierzchołek będzie składał się z 2 współrzędnych oraz będzie zawierał listę sąsiadujących z nim wierzchołków. Rozwiązanie to było wystarczające, jednak w celu poprawienia szybkości obliczeń zastosowana została macierz sąsiedztwa. Podczas generowania grafu macierz sąsiedztwa była wypełniana wartościami informującymi czy dany wierzchołek jest sąsiadem innego. Rozwiązanie to pozwoliło na polepszenie szybkości obliczeń kosztem wykorzystanem pamięci.
