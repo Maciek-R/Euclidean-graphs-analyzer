@@ -84,6 +84,7 @@ class GraphAnalyzer:
 
         self.logger.debug("Performing analysis...")
         comps_sizes_set = self.load_max_comps_sizes()
+        modified = False
         try:
             for size in sizes:
                 size_str = str(size)
@@ -104,9 +105,11 @@ class GraphAnalyzer:
                     indexes = range(len(comps_sizes), repeats)
                     args = [(size, radius, index) for index in indexes]
                     comps_sizes += pool.starmap(self.analyze_one, args)
+                    modified = True
 
         finally:
-            self.save_max_comps_sizes(comps_sizes_set)
+            if modified:
+                self.save_max_comps_sizes(comps_sizes_set)
 
         return comps_sizes_set
 
@@ -159,6 +162,6 @@ class GraphAnalyzer:
             comps_sizes_set (ComponentsSizesSet): analysis results
         """
         path = Path.joinpath(self.output_dir, 'max_comps_size.json')
-        self.logger.debug("Saving results to file %s..., path")
+        self.logger.debug("Saving results to file %s...", path)
         with open(path, "w") as ofile:
             return json.dump(comps_sizes_set, ofile)
