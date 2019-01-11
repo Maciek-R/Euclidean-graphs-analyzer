@@ -136,7 +136,7 @@ def create_parser() -> ArgumentParser:
     parser.add_argument("--plot_type",
                         action="store",
                         type=str,
-                        choices=["CSV", "PNG"],
+                        choices=["CSV"],
                         default=None,
                         help="If specified, specifies type of plot to make")
     parser.add_argument("--verbose", "-v",

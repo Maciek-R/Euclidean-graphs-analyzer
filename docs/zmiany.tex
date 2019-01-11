@@ -3,12 +3,13 @@
 \section{Zmiany w projekcie}
 	\label{final:zmiany}
 
-	Jedną z istotnych zmian jakie zostały wprowadzone do projektu to zmiana struktury grafu. Na początku zakładaliśmy, że każdy wierzchołek będzie składał się z 2 współrzędnych oraz będzie zawierał listę sąsiadujących z nim wierzchołków. Rozwiązanie to było wystarczające, jednak w celu poprawienia szybkości obliczeń zastosowana została macierz sąsiedztwa(lista tablic). Podczas generowania grafu macierz sąsiedztwa była wypełniana wartościami logicznymi informującymi o tym, czy dany wierzchołek jest sąsiadem innego.\\
-	Aktualna struktura grafu składa się z:
+	Jedną z istotnych zmian jakie zostały wprowadzone do projektu to zmiana struktury grafu. Na początku zakładaliśmy, że każdy wierzchołek będzie składał się z 2 współrzędnych oraz będzie zawierał listę sąsiadujących z nim wierzchołków. Rozwiązanie to było wystarczające, jednak nieefektywne z punktu widzenia naszych badań. W celu poprawienia szybkości obliczeń zastosowana została logiczna macierz sąsiedztwa. Ponadto udało się w dużej mierze zredukować zapotrzebowania pamięciowe dla każdego z grafów, zwłaszcza co do miejsca zajmowanego na dysku (o czym więcej napisano w~\ref{final:struktura:klasy}). Jest to niezgodne z intuicją (ponieważ od teraz mamy stałą złożoność pamięciową $O(\texttt{N}^2)$), jednak prosta macierz wartości logicznych okazuje się być znacznie łatwiej serializowalna i kompresowalna niż lista wierzchołków.
+
+	Zmiana struktury grafu pociągnęła za sobą drobne zmiany w algorytmie wyszukiwania maksymalnej składowej spójnej. Wcześniej, w trakcie przechodzenia w głąb, kolejne wierzchołki pobierane były z listy sąsiadów badanego w danej iteracji. Teraz, jako że takowa lista nie istnieje, wierzchołki sąsiednie wyszukiwane są w wierszach macierzy sąsiedztwa.
+
+	Podsumowując dokonane zmiany, struktura grafu będzie następująca:
 	\begin{itemize}
-		\item Lista wierzchołków
-		\item Lista tablic - jeśli występuje krawędź między wierzchołkiem o indeksie 'i' oraz 'j' to odpowiadająca komórka w tablicy jest oznaczana jako True
+		\item Lista wierzchołków \texttt{nodes} o rozmiarze \texttt{N}
+		\item Macierz sąsiedztwa \texttt{edges} o rozmiarze \texttt{N x N} - jeśli występuje krawędź między wierzchołkiem o numerze \texttt{i} oraz \texttt{j}, to odpowiadająca komórka w tablicy \texttt{edges[i][j]} jest oznaczana jako logiczna prawda. Jako, że badane przez nas grafy będą nieskierowane, w takim przypadku również komórka \texttt{edges[j][i]} będzie zawierać logiczną prawdę.
 	\end{itemize}
-	
-	Złożoność pamięciowa takiego rozwiązania wynosi aż O(n*n). Natomiast zapisana w takiej formie jest łatwo serializowalna oraz kompresowalna, co pozwoliło na oszczędzenie miejsca w stosunku do zastosowanej wcześniej listy sąsiedztwa.\\
-	Zmiana struktury grafu spowodowała, że konieczna była niewielka zmiana w algorytmie wyszukiwania składowej spójnej. Zamiast listy odwiedzonych wierzchołków w tablicy ustawiana jest wartość True jeśli dany wierzchołek jest sąsiadem innego. Zasada działania algorytmu DFS została taka sama.
+

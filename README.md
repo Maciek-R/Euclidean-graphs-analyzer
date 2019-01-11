@@ -1,8 +1,18 @@
-Projekt GIS
+# Projekt GIS
+
+## Badanie wÅ‚aÅ›ciwoÅ›ci grafÃ³w Euklidesowych
+
+NaleÅ¼y zaimplementowaÄ‡ generator sieci euklidesowych, a nastÄ™pnie zbadaÄ‡ prawdopodobieÅ„stwo spÃ³jnoÅ›ci sieci i okresliÄ‡ rozmiar najwiÄ™kszej skÅ‚adowej spÃ³jnej w zaleÅ¼noÅ›ci od liczby i zasiÄ™gu wierzchoÅ‚kÃ³w.
+
+Aby uruchomiÄ‡ program testujÄ…cy, uruchom plik `analyze_graphs.py`. PrzykÅ‚ad uÅ¼ycia:
+```sh
+python3 ./analyze_graphs.py -v
+	--start_size=10000 --stop_size=20000 --size_step=100
+	--start_radius=0.01 --stop_radius=0.02 --radius_step=0.001
+	--jobs=8 --repeats=100 --output_dir=output
+```
+
+## Autorzy
 
 1. Maciej Ruszczyk
 2. Adam Kowalewski
-
-Badanie w³aœciwoœci Grafów Euklidesowych
-
-Nale¿y zaimplementowaæ generator sieci euklidesowych, a nastêpnie zbadaæ prawdopodobieñstwo spójnoœci sieci i okreœliæ rozmiar najwiêkszej sk³adowej spójnej w zale¿noœci od liczby i zasiêgu wierzcho³ków.

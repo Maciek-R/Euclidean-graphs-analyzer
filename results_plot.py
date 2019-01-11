@@ -126,16 +126,6 @@ class CSVResultsPlotter(ResultsPlotter):
         return Path.joinpath(self.output_dir, fname)
 
 
-class PNGResultsPlotter(ResultsPlotter):
-    output_dir: Path
-
-    def __init__(self, output_dir: Path) -> None:
-        self.output_dir = output_dir
-
-    def plot(self, results_set: ResultsSet) -> None:
-        raise NotImplementedError()
-
-
 class NullResultsPlotter(ResultsPlotter):
     def plot(self, results_set: ResultsSet) -> None:
         pass

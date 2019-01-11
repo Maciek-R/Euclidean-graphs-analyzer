@@ -6,31 +6,32 @@
 	\subsection{Wymagania systemowe}
 		\label{final:struktura:wymagania}
 
-		Do testowania został zastosowany python w wersji 3.6.3 na systemie operacyjnym Ubuntu. Obliczenia wykonywane były na komputerze z wielordzeniowym procesorem co pozwoliło na zrównoleglenie obliczeń, co znacznie zmniejszyło czas wykonywanych obliczeń. Ważniejsze zastosowane biblioteki python'a:
-		\begin{itemize}
-			\item argparse - biblioteka zawierająca funkcjonalności pozwalająca na wygodne parsowanie argumentów wejściowych aplikacji
-			\item multiprocessing - biblioteka pozwalająca na wielowątkowe obliczenia
-			\item logging - wyświetlanie logów w konsoli
-			\item json - konwersja danych do formatu json
-			\item statistics - biblioteka zawierająca funkcje pozwalające na obliczenie średniej i odchylenia standardowego
-			\item gzip - pakowanie generowanych grafów do formatu .gz, w celu oszczędności pamięci na dysku
-			\item matplotlib - biblioteka pozwalająca na rysowanie wykresów
-		\end{itemize}
+		Do testowania został zastosowany python w wersji 3.6.3 na systemie operacyjnym Linux Ubuntu 18.04. Obliczenia wykonywane były na komputerze z wielordzeniowym procesorem co pozwoliło na zrównoleglenie działań, znacznie zmniejszając czas wykonywanych obliczeń. Fakt posiadania dysków SSD również przyspieszył pracę, ze względu na potrzebę zapisywania wyników pośrednich na dysk twardy.
+
+		Jako że struktury i algorytmy wykorzystane w projekcie zostały napisane w dużej mierze przez nas samych, nie skorzystaliśmy z innych bibliotek dla języka Python, oprócz tych wbudowanych w jego bibliotekę standardową. (Wyjątkiem jest tylko \texttt{numpy}, ale użyto ją tylko podczas generowania sekwencji przypadków testowych)
 
 	\subsection{Podział na moduły}
 		\label{final:struktura:klasy}
 
 		% Nie trzeba opisywać dokładnie modułów, po to jest dokumentacja w kodzie. Fajnie by było jednak wstawić tutaj jakiegoś UMLa, który opisuje zależność między modułami/klasami (bo tego w dokumentacji w kodzie nie da się umieścić).
 
-		Aktualna struktura grafu \ref{final:zmiany} została opisane wcześniej, lecz konieczne jest również krótkie wyjaśnienie wcześniej nieopisywanym klasom.
+		Poniżej zamieszczono krótki opis klas/modułów napisanych w ramach niniejszego projektu.
+
 		\subsubsection{Klasa \texttt{GraphGenerator}}
-			Klasa implementująca mechanizm generacji grafu. Jako argumenty przyjmuje liczbę wierzchołków grafu oraz promień. W pierwszej kolejności generowane są współrzędne wierzchołków. Następnie tworzona jest lista krawędzi grafu. W tym celu analizowane są wszystkie pary wierzchołków i jeśli odległość między nimi jest mniejsza od promienia to jest tworzona krawędź.
+
+			Jest to klasa do generowania grafów, w naszym przypadku losowych sieci euklidesowych. Graf tworzony jest w dwóch etapach. W pierwszej kolejności generowane są w sposób losowy współrzędne wierzchołków. Następnie łączone są wszystkie pary wierzchołków, których odległość jest mniejsza lub równa promieniowi. Jako że odbywa się to na zasadzie ,,każdy z każdym'', złożoność algorytmu jest kwadratowa. Generowane grafy zapisywane są następnie na dysku twardym przy użyciu \texttt{GraphDatabase}.
+
 		\subsubsection{Klasa \texttt{GraphDatabase}}
-			Klasa zawierająca mechanizmy zapisu oraz odczytu grafów z pliku celem oszczędności czasu obliczeń oraz celem późniejszego wykorzystania do wielokrotnych testów.
+
+			Klasa zawierająca mechanizmy zapisu oraz odczytu grafów z twardego dysku. Serializuje ona graf przy użyciu mechanizmów wbudowanych w język Python oraz kompresuje dane przy użyciu algorytmu \texttt{gzip}.
+
 		\subsubsection{Klasa \texttt{GraphAnalyzer}}
-			Implementuje analizę grafu. Oblicza maksymalny rozmiar składowej spójnej, prawdopodobieństwo spójności grafu(średnią oraz odchylenie standardowe). Wykonywane obliczenia są zapisywane do pliku w formacie json.
+
+			Oblicza maksymalny rozmiar składowej spójnej, prawdopodobieństwo spójności grafu(średnią oraz odchylenie standardowe). Wykonywane obliczenia są zapisywane do pliku podręcznego w formacie JSON.
+
 		\subsubsection{Klasa \texttt{ResultsPlotter}}
-			Klasa pozwalająca na generowanie wykresów, które umieszczone zostały w niniejszej dokumentacji.
+
+			Klasa pozwalająca na generowanie wykresów z wynikami (na chwilę obecną tylko wydruki do CSV).
 
 	\subsection{Sposób uruchamiania}
 		\label{final:struktura:uruchamianie}
@@ -60,7 +61,11 @@
 
 		Przykładowy sposób wywołania:
 
-		\texttt{python3 \\./analyze\_graphs.py -v \\---start\_size=10000 \\---stop\_size=20000 \\---size\_step=100 \\---start\_radius=0.01 \\---stop\_radius=0.02 \\---radius\_step=0.001 \\---jobs=8 \\---repeats=100 \\---output\_dir=output}
-
+		\begin{verbatim}
+		python3 ./analyze_graphs.py -v
+		    --start_size=10000 --stop_size=20000 --size_step=100
+		    --start_radius=0.01 --stop_radius=0.02 --radius_step=0.001
+		    --jobs=8 --repeats=100 --output_dir=output
+		\end{verbatim}
 
 		Takie wywołanie spowoduje, że zostaną wowołane testy dla grafow o rozmiarze od 10000 do 20000 wierzchołków z krokiem 100 oraz promieniem w zakresie od 0.01 do 0.02 z krokiem 0.001. Dla każdego przypadku zostanie wygenerowane 100 grafów. Obliczenia będą wykonywane z użyciem 8 wątków. Wyniki zostaną zapisane w folderze output.
