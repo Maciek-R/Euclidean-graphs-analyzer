@@ -6,7 +6,16 @@
 	\subsection{Wymagania systemowe}
 		\label{final:struktura:wymagania}
 
-		% Napisać o tym, na jakiej wersji pythona testowaliśmy, jakie biblioteki zewnętrzne były potrzebne, jaki system operacyjny. Napisać o tym, iż najlepiej jest mieć wielordzeniowy procesor, gdyż projekt jest napisany pod to
+		Do testowania został zastosowany python w wersji 3.6.3 na systemie operacyjnym Ubuntu. Obliczenia wykonywane były na komputerze z wielordzeniowym procesorem co pozwoliło na zrównoleglenie obliczeń, co znacznie zmniejszyło czas wykonywanych obliczeń. Ważniejsze zastosowane biblioteki python'a:
+		\begin{itemize}
+			\item argparse - biblioteka zawierająca funkcjonalności pozwalająca na wygodne parsowanie argumentów wejściowych aplikacji
+			\item multiprocessing - biblioteka pozwalająca na wielowątkowe obliczenia
+			\item logging - wyświetlanie logów w konsoli
+			\item json - konwersja danych do formatu json
+			\item statistics - biblioteka zawierająca funkcje pozwalające na obliczenie średniej i odchylenia standardowego
+			\item gzip - pakowanie generowanych grafów do formatu .gz, w celu oszczędności pamięci na dysku
+			\item matplotlib - biblioteka pozwalająca na rysowanie wykresów
+		\end{itemize}
 
 	\subsection{Podział na moduły}
 		\label{final:struktura:klasy}
@@ -16,9 +25,13 @@
 		% Napisać, że o ile struktura grafu i węzła została już opisana wcześniej (dać ref'a do zmian i projektu), to kilka słów wyjaśnienia należy się klasom, których jeszcze nie opisywaliśmy. I dosłownie, napisać po trzy zdania dla każdego, co robią.
 
 		\subsubsection{Klasa \texttt{GraphGenerator}}
+			Klasa implementująca mechanizm generacji grafu. Jako argumenty przyjmuje liczbę wierzchołków grafu oraz promień. W pierwszej kolejności generowane są współrzędne wierzchołków. Następnie tworzona jest lista krawędzi grafu. W tym celu analizowane są wszystkie pary wierzchołków i jeśli odległość między nimi jest mniejsza od promienia to jest tworzona krawędź.
 		\subsubsection{Klasa \texttt{GraphDatabase}}
+			Klasa zawierająca mechanizmy zapisu oraz odczytu grafów z pliku celem oszczędności czasu obliczeń oraz celem późniejszego wykorzystania do wielokrotnych testów.
 		\subsubsection{Klasa \texttt{GraphAnalyzer}}
+			Implementuje analizę grafu. Oblicza maksymalny rozmiar składowej spójnej, prawdopodobieństwo spójności grafu(średnią oraz odchylenie standardowe). Wykonywane obliczenia są zapisywane do pliku w formacie json.
 		\subsubsection{Klasa \texttt{ResultsPlotter}}
+			Klasa pozwalająca na generowanie wykresów, które umieszczone zostały w niniejszej dokumentacji.
 
 	\subsection{Sposób uruchamiania}
 		\label{final:struktura:uruchamianie}
@@ -49,6 +62,7 @@
 		Przykładowy sposób wywołania:
 
 		% TODO: sformatować to, żeby nie było jednym szlaczkiem
-		\texttt{python3 ./analyze\_graphs.py -v ---start\_size=10000 ---stop\_size=20000 ---size\_step=100 ---start\_radius=0.01 ---stop\_radius=0.02 ---radius\_step=0.001 ---jobs=8 ---repeats=100 ---output\_dir=output}
+		\texttt{python3 ./analyze\_graphs.py -v ---start\_size=10000 ---stop\_size=20000 \\---size\_step=100 ---start\_radius=0.01 ---stop\_radius=0.02 \\---radius\_step=0.001 ---jobs=8 ---repeats=100 ---output\_dir=output}
 
-		Takie wywołanie spowoduje, że zostaną wowołane testy dla grafów o rozmiarze od 10000 do 20000 wierzchołków z krokiem 100 oraz promieniem w zakresie od 0.01 do 0.02 z krokiem 0.001. Dla każdego przypadku zostanie wygenerowane 100 grafów. Obliczenia będą wykonywane z użyciem 8 wątków. Wyniki zostaną zapisane w folderze output.
+
+		Takie wywołanie spowoduje, że zostaną wowołane testy dla grafow o rozmiarze od 10000 do 20000 wierzchołków z krokiem 100 oraz promieniem w zakresie od 0.01 do 0.02 z krokiem 0.001. Dla każdego przypadku zostanie wygenerowane 100 grafów. Obliczenia będą wykonywane z użyciem 8 wątków. Wyniki zostaną zapisane w folderze output.
