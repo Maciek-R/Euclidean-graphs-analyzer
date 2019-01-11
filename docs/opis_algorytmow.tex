@@ -1,0 +1,77 @@
+\section{Opis algorytmów}
+	\label{projekt:algorytmy}
+
+	Programy zaimplementowane w~ramach projektu wykonywać będą zasadniczo dwie czynności: generować sieć euklidesową oraz badać parametry spójności. Poniżej opisano zaproponowane algorytmy.
+
+	\subsection{Generacja sieci euklidesowych}
+		\label{projekt:algorytmy:generacja}
+
+		%TODO: Dać listing algorytmu generacji
+		%TODO: Dać przykładową sieć
+
+		Algorytm ten będzie przyjmował dwa dodatnie parametry wejściowe: liczbę wierzchołków \texttt{n} oraz promień \texttt{r}. Na początku algorytm generuje odpowiednią ilość wierzchołków, w~sposób losowy, na obszarze 2D o~współrzędnych $(\texttt{x}, \texttt{y})$ mieszczących się w~zakresie $[0; 1]$. Następnie, dla każdej pary wierzchołków $(\texttt{v}, \texttt{u})$, obliczana jest odległość między nimi, w~oparciu o~metrykę euklidesową. Jeśli odległość ta jest mniejsza lub równa promieniowi, między wierzchołkami tworzona jest krawędź (dodawany jest nowy sąsiad).
+
+	\subsection{Badanie spójności sieci}
+		\label{projekt:algorytmy:spojnosc}
+
+		Algorytm ten zostanie zaimplementowany w~oparciu o~technikę badania grafu w głąb\cite[s.~270]{WojciechowskiJacek2013Gis}. Na wejściu przyjmować będzie sieć wygenerowaną w~punkcie~\ref{projekt:algorytmy:generacja}. Na wyjściu zaś zwrócony zostanie rozmiar największej składowej spójnej. Jeśli dany graf jest spójny, to otrzymana wartość będzie równa ilości krawędzi. Pseudokod opisujący algorytm przedstawiono na listingu~\ref{alg:spojnosc}.
+
+		\begin{algorithm}
+			\SetKwData{maxSize}{maxSize}\SetKwData{visited}{visited}\SetKwData{S}{S}\SetKwData{v}{v}\SetKwData{u}{u}\SetKwData{U}{U}\SetKwData{size}{size}\SetKwData{G}{G}\SetKwData{i}{i}\SetKwData{j}{j}\SetKwData{n}{n}
+			\SetKwFunction{Push}{push}\SetKwFunction{Pop}{pop}\SetKwFunction{Max}{max}
+			\SetKwInOut{Input}{Wejście}\SetKwInOut{Output}{Wyjście}\SetKwInput{KwData}{Zmienne pomocniczne}
+
+			\Input{\G~- graf niezorientowany o~\n wierzchołkach}
+			\Output{\maxSize~- rozmiar największej składowej spójnej}
+			\KwData{\visited~- tablica logiczna odwiedzin wierzchołków
+				    \\~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\S~- stos numerów wierzchołków
+				    \\~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\i,~\j,~\u~- numery wierzchołków w~grafie
+				    \\~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\size~- rozmiar badanej składowej}
+			\BlankLine
+
+			Utwórz tablicę \visited o~\n elementach\;
+			Tablicę \visited wypełnij wartościami \textbf{false}\;
+			Utwórz pusty stos \S\;
+			$\maxSize \gets 0$\;
+			\BlankLine
+
+			\For{$\i\leftarrow 0$ \KwTo $\n - 1$}{
+				\If{$\visited[\i]$}{
+					\textbf{pass}\;
+				}
+				\BlankLine
+
+				$\size \gets 1$\;
+				$\S.\Push{\i}$\;
+				$\visited[\i] \gets \textbf{true}$\;
+				\BlankLine
+
+				\While{$\S \neq \emptyset$}{
+					$\j \gets \S.\Pop{}$\;
+					\BlankLine
+
+					\ForEach{$\u \in \G[\j].\U$}{
+						\If{$\visited[\u]$}{
+							\textbf{pass}\;
+						}
+						\BlankLine
+
+						$\size \gets \size + 1$\;
+						$\S.\Push{\u}$\;
+						$\visited[\i] \gets \textbf{true}$\;
+					}
+				}
+				\BlankLine
+
+				\If{$\size > \maxSize$}{
+					$\maxSize \gets \size$\;
+				}
+			}
+			\BlankLine
+
+			\Return \maxSize\;
+			\BlankLine
+
+			\caption{Algorytm badania spójności sieci}
+			\label{alg:spojnosc}
+		\end{algorithm}

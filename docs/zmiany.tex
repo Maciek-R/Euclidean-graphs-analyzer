@@ -1,8 +1,11 @@
 %!TEX root = ./report.tex
 
-\chapter{Wprowadzone zmiany}
+\section{Zmiany w projekcie}
+	\label{final:zmiany}
 
-	\section{Zmiany wprowadzone względem poprzedniej wersji dokumentacji}
-		\label{zmiany:zmiana}
-		
-		Jedną z istotnych zmian jakie zostały wprowadzone do aplikacji to zmiana struktury grafu. Na początku zakładaliśmy, że każdy wierzchołek będzie składał się z 2 współrzędnych oraz będzie zawierał listę sąsiadujących z nim wierzchołków. Rozwiązanie to było wystarczające, jednak w celu poprawienia szybkości obliczeń zastosowana została macierz sąsiedztwa. Podczas generowania grafu macierz sąsiedztwa była wypełniana wartościami informującymi czy dany wierzchołek jest sąsiadem innego. Rozwiązanie to pozwoliło na polepszenie szybkości obliczeń kosztem wykorzystanem pamięci.
+	Jedną z istotnych zmian jakie zostały wprowadzone do projektu to zmiana struktury grafu. Na początku zakładaliśmy, że każdy wierzchołek będzie składał się z 2 współrzędnych oraz będzie zawierał listę sąsiadujących z nim wierzchołków. Rozwiązanie to było wystarczające, jednak w celu poprawienia szybkości obliczeń zastosowana została macierz sąsiedztwa. Podczas generowania grafu macierz sąsiedztwa była wypełniana wartościami logicznymi, informującymi o tym, czy dany wierzchołek jest sąsiadem innego.
+
+	% W sumie to jest prawie "macierz", bo to jest lista tablic
+	% Podsumuj strukturę grafu tak, jak to zrobiono w poprzednim rozdziale
+	% Napisz o złożoności pamięciowej. Co prawda aktualne rozwiązanie zajmuje dużo miejsca w pamięci RAM (bo dla każdego wierzchołka, czy jest sąsiadem czy nie, mamy informację), ale jest znacznie łatwiej serializowalna, a przede wszystkim kompresowalna, więc finalnie na dysku twardym taki graf zajmuje mniej miejsca niż w przypadku listy sąsiedztwa.
+	% Napisz o tym, że zmiana struktury grafu pociągnęła zmiany w algorytmie wyszukiwania składowej stałej i napisz jaka to zmiana była

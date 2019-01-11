@@ -1,0 +1,54 @@
+%!TEX root = ./report.tex
+
+\section{Struktura projektu}
+	\label{final:struktura}
+
+	\subsection{Wymagania systemowe}
+		\label{final:struktura:wymagania}
+
+		% Napisać o tym, na jakiej wersji pythona testowaliśmy, jakie biblioteki zewnętrzne były potrzebne, jaki system operacyjny. Napisać o tym, iż najlepiej jest mieć wielordzeniowy procesor, gdyż projekt jest napisany pod to
+
+	\subsection{Podział na moduły}
+		\label{final:struktura:klasy}
+
+		% Nie trzeba opisywać dokładnie modułów, po to jest dokumentacja w kodzie. Fajnie by było jednak wstawić tutaj jakiegoś UMLa, który opisuje zależność między modułami/klasami (bo tego w dokumentacji w kodzie nie da się umieścić).
+
+		% Napisać, że o ile struktura grafu i węzła została już opisana wcześniej (dać ref'a do zmian i projektu), to kilka słów wyjaśnienia należy się klasom, których jeszcze nie opisywaliśmy. I dosłownie, napisać po trzy zdania dla każdego, co robią.
+
+		\subsubsection{Klasa \texttt{GraphGenerator}}
+		\subsubsection{Klasa \texttt{GraphDatabase}}
+		\subsubsection{Klasa \texttt{GraphAnalyzer}}
+		\subsubsection{Klasa \texttt{ResultsPlotter}}
+
+	\subsection{Sposób uruchamiania}
+		\label{final:struktura:uruchamianie}
+
+		\noindent W celu uruchomienia programu należy wywołać plik \texttt{analyze\_graphs.py}. Przyjmuje on następujące parametry:
+		\begin{itemize}
+			\item \texttt{---start\_size} - wymagany. Liczba wierzchołków pierwszego generowanego grafu
+
+			\item \texttt{---stop\_size} - wymagany. Liczba wierzchołków ostatniego generowanego grafu
+
+			\item \texttt{---size\_step} - opcjonalny. Liczba wierzchołków dodawana do kolejnego generowanego grafu.
+
+			\item \texttt{---start\_radius} - wymagany. Promień pierwszego generowanego grafu
+
+			\item \texttt{---stop\_radius} - wymagany. Promień ostatniego generowanego grafu
+
+			\item \texttt{---radius\_step} - opcjonalny. Promień dodawany do kolejnego generowanego grafu
+
+			\item \texttt{---repeats} - opcjonalny. Liczba testów(powtórzeń) wykonywanych w ramach jednego grafu
+
+			\item \texttt{---jobs} - opcjonalny. Liczba wątków, przy użyciu których będą wykonywane obliczenia
+
+			\item \texttt{---output\_dir} - opcjonalny. Folder, do którego będą zapisywane wyniki
+
+			\item \texttt{---verbose} - opcjonalny. Spowoduje, iż na konsolę będą wypisywane komunikaty diagnostyczne (pomocne, gdy obliczenia trwają bardzo długo)
+		\end{itemize}
+
+		Przykładowy sposób wywołania:
+
+		% TODO: sformatować to, żeby nie było jednym szlaczkiem
+		\texttt{python3 ./analyze\_graphs.py -v ---start\_size=10000 ---stop\_size=20000 ---size\_step=100 ---start\_radius=0.01 ---stop\_radius=0.02 ---radius\_step=0.001 ---jobs=8 ---repeats=100 ---output\_dir=output}
+
+		Takie wywołanie spowoduje, że zostaną wowołane testy dla grafów o rozmiarze od 10000 do 20000 wierzchołków z krokiem 100 oraz promieniem w zakresie od 0.01 do 0.02 z krokiem 0.001. Dla każdego przypadku zostanie wygenerowane 100 grafów. Obliczenia będą wykonywane z użyciem 8 wątków. Wyniki zostaną zapisane w folderze output.
