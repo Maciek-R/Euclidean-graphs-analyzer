@@ -11,6 +11,4 @@
 	\end{itemize}
 	
 	Złożoność pamięciowa takiego rozwiązania wynosi aż O(n*n). Natomiast zapisana w takiej formie jest łatwo serializowalna oraz kompresowalna, co pozwoliło na oszczędzenie miejsca w stosunku do zastosowanej wcześniej listy sąsiedztwa.\\
-	Zmiana struktury grafu spowodowała, że konieczna była zmiana w algorytmie wyszukiwania składowej spójnej.
-
-	% Napisz o tym, że zmiana struktury grafu pociągnęła zmiany w algorytmie wyszukiwania składowej stałej i napisz jaka to zmiana była
+	Zmiana struktury grafu spowodowała, że konieczna była niewielka zmiana w algorytmie wyszukiwania składowej spójnej. Zamiast listy odwiedzonych wierzchołków w tablicy ustawiana jest wartość True jeśli dany wierzchołek jest sąsiadem innego. Zasada działania algorytmu DFS została taka sama.
