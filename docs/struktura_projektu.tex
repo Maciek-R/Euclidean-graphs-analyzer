@@ -23,7 +23,7 @@
 		% Nie trzeba opisywać dokładnie modułów, po to jest dokumentacja w kodzie. Fajnie by było jednak wstawić tutaj jakiegoś UMLa, który opisuje zależność między modułami/klasami (bo tego w dokumentacji w kodzie nie da się umieścić).
 
 		% Napisać, że o ile struktura grafu i węzła została już opisana wcześniej (dać ref'a do zmian i projektu), to kilka słów wyjaśnienia należy się klasom, których jeszcze nie opisywaliśmy. I dosłownie, napisać po trzy zdania dla każdego, co robią.
-
+		Aktualna struktura grafu \ref{final:zmiany} została opisane wcześniej, lecz konieczne jest również krótkie wyjaśnienie wcześniej nieopisywanym klasom.
 		\subsubsection{Klasa \texttt{GraphGenerator}}
 			Klasa implementująca mechanizm generacji grafu. Jako argumenty przyjmuje liczbę wierzchołków grafu oraz promień. W pierwszej kolejności generowane są współrzędne wierzchołków. Następnie tworzona jest lista krawędzi grafu. W tym celu analizowane są wszystkie pary wierzchołków i jeśli odległość między nimi jest mniejsza od promienia to jest tworzona krawędź.
 		\subsubsection{Klasa \texttt{GraphDatabase}}
