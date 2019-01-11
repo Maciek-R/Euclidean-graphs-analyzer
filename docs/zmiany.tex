@@ -3,9 +3,14 @@
 \section{Zmiany w projekcie}
 	\label{final:zmiany}
 
-	Jedną z istotnych zmian jakie zostały wprowadzone do projektu to zmiana struktury grafu. Na początku zakładaliśmy, że każdy wierzchołek będzie składał się z 2 współrzędnych oraz będzie zawierał listę sąsiadujących z nim wierzchołków. Rozwiązanie to było wystarczające, jednak w celu poprawienia szybkości obliczeń zastosowana została macierz sąsiedztwa. Podczas generowania grafu macierz sąsiedztwa była wypełniana wartościami logicznymi, informującymi o tym, czy dany wierzchołek jest sąsiadem innego.
+	Jedną z istotnych zmian jakie zostały wprowadzone do projektu to zmiana struktury grafu. Na początku zakładaliśmy, że każdy wierzchołek będzie składał się z 2 współrzędnych oraz będzie zawierał listę sąsiadujących z nim wierzchołków. Rozwiązanie to było wystarczające, jednak w celu poprawienia szybkości obliczeń zastosowana została macierz sąsiedztwa(lista tablic). Podczas generowania grafu macierz sąsiedztwa była wypełniana wartościami logicznymi informującymi o tym, czy dany wierzchołek jest sąsiadem innego.\\
+	Aktualna struktura grafu składa się z:
+	\begin{itemize}
+		\item Lista wierzchołków
+		\item Lista tablic - jeśli występuje krawędź między wierzchołkiem o indeksie 'i' oraz 'j' to odpowiadająca komórka w tablicy jest oznaczana jako True
+	\end{itemize}
+	
+	Złożoność pamięciowa takiego rozwiązania wynosi aż O(n*n). Natomiast zapisana w takiej formie jest łatwo serializowalna oraz kompresowalna, co pozwoliło na oszczędzenie miejsca w stosunku do zastosowanej wcześniej listy sąsiedztwa.\\
+	Zmiana struktury grafu spowodowała, że konieczna była zmiana w algorytmie wyszukiwania składowej spójnej.
 
-	% W sumie to jest prawie "macierz", bo to jest lista tablic
-	% Podsumuj strukturę grafu tak, jak to zrobiono w poprzednim rozdziale
-	% Napisz o złożoności pamięciowej. Co prawda aktualne rozwiązanie zajmuje dużo miejsca w pamięci RAM (bo dla każdego wierzchołka, czy jest sąsiadem czy nie, mamy informację), ale jest znacznie łatwiej serializowalna, a przede wszystkim kompresowalna, więc finalnie na dysku twardym taki graf zajmuje mniej miejsca niż w przypadku listy sąsiedztwa.
 	% Napisz o tym, że zmiana struktury grafu pociągnęła zmiany w algorytmie wyszukiwania składowej stałej i napisz jaka to zmiana była
