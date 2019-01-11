@@ -9,11 +9,11 @@
 % TABELKA
 % \\
 % \\
-	\subsection{Testowanie}
+	\subsection{Przeprowadzone testy}
 		\label{final:testy:przyklad1}
 		\includepdf[scale=0.9, pages={1}]{500-0_0010_125_consistency_prob.pdf}
 		\includepdf[scale=0.9, pages={1}]{500-0_0010_125_max_comps_sizes_means.pdf}
-		%\includepdf[scale=0.8, pages={1}]{500-max_comps_sizes.pdf}
+		\includepdf[scale=0.9, pages={1}]{500-max_comps_sizes.pdf}
 		\includepdf[scale=0.9, pages={1}]{10000-0_02_0-consistency_prob.pdf}
 		\includepdf[scale=0.9, pages={1}]{10000-0_02_0-max_comps_sizes_means.pdf}
 		\includepdf[scale=0.9, pages={1}]{10000-max_comps_sizes.pdf}
@@ -23,5 +23,13 @@
 
 	\subsection{Wnioski}
 		\label{final:testy:wnioski}
-	% \\
-	% Wnioski na temat prawdopodobiensta spojnosci sieci itp itd.
+	
+	Z rysunku nr 1 można zauważyć, że wraz że wraz ze wzrostem liczby wierzchołków grafu rośnie również prawdopodobieństo, że będzie on spójny. Podobna zależność występuje przy zmianie promienia. Warto również wspomnieć o tym, że przy małej liczbie wierzchołków oraz małemu promieniowi prawdopodobieństwo spójności jest zerowe. W pewnym momencie następuje nagły wzrost prawdopodobieństa i rośnie ono dosyć szybko. Następnie zwalnia na poziomie 90 procent i powoli dąży do maksymalnej wartości.
+
+	W skrócie z przeprowadzonych testów można wyciągnąć następujące wnioski:
+	\begin{itemize}
+		\item Wraz ze wzrostem liczby wierzchołków rośnie prawdopodobieństwo spójności sieci
+		\item Wraz ze wzrostem promienia rośnie prawdopodobieństwo spójności sieci
+		\item Im większa liczba wierzchołków w grafie tym większy średni rozmiar największej składowej spójnej
+		\item Im większy promień grafu tym większy średni rozmiar największej składowej spójnej	
+	\end{itemize}
