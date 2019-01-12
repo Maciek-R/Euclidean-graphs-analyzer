@@ -1,0 +1,200 @@
+\documentclass[a4paper,11pt]{article}
+\usepackage{pgfplotstable}
+\usepackage{pgfplots}
+\usepackage{siunitx}
+% Kodowanie wyjściowe czcionki
+\usepackage[T1]{fontenc}
+% Kodowanie plików źródłowych
+\usepackage[utf8]{inputenc}
+\usepackage[english,polish]{babel}
+\usetikzlibrary{external}
+
+\pgfplotsset{compat=1.15}
+\sisetup{detect-weight,exponent-product=\cdot,output-decimal-marker={,},
+	per-mode=symbol,binary-units=true,range-phrase={-},range-units=single}
+\SendSettingsToPgf
+
+\textwidth 160mm \textheight 247mm
+
+\tikzsetnextfilename{500-0_001:0_125_max_comps_sizes_means}
+\tikzexternalize
+\begin{document}
+
+\begin{figure}[tb]
+	\begin{tikzpicture}
+		\begin{axis}
+			[
+				width=\textwidth,
+				height=0.5\textwidth,
+				xlabel=Promień grafu,
+				ylabel=Średni rozmiar największej składowej spójnej,
+				scaled ticks=false,
+				tick label style={/pgf/number format/fixed},
+				label style={font=\footnotesize},
+				legend style={font=\footnotesize},
+				title style={font=\footnotesize},
+				% xtick={0, 25, 10, 15, 20},
+				% ytick={1000, 2000, 3000},
+				xmin=0.005, xmax=0.125,
+				ymin=0.0, ymax=1000.0,
+				legend pos=south east,
+			]
+
+			\addplot [orange, semithick] table [y=comps_sizes_mean, x=radius]{../../output2/1000-0_0:5_0-max_comps_sizes_means.csv};
+			\addlegendentry{~n = 1000}
+
+			\addplot [red, semithick] table [y=comps_sizes_mean, x=radius]{../../output2/700-0_0:5_0-max_comps_sizes_means.csv};
+			\addlegendentry{n = 700}
+
+			\addplot [cyan, semithick] table [y=comps_sizes_mean, x=radius]{../../output2/500-0_0:5_0-max_comps_sizes_means.csv};
+			\addlegendentry{n = 500}
+
+			\addplot [blue, semithick] table [y=comps_sizes_mean, x=radius]{../../output2/400-0_0:5_0-max_comps_sizes_means.csv};
+			\addlegendentry{n = 400}
+
+			\addplot [magenta, semithick] table [y=comps_sizes_mean, x=radius]{../../output2/300-0_0:5_0-max_comps_sizes_means.csv};
+			\addlegendentry{n = 300}
+		\end{axis}
+	\end{tikzpicture}
+\end{figure}
+
+\tikzsetnextfilename{500-0_001:0_125_max_comps_sizes_means}
+\begin{figure}[tb]
+	\begin{tikzpicture}
+		\begin{axis}
+			[
+				width=\textwidth,
+				height=0.5\textwidth,
+				xlabel=Promień grafu,
+				ylabel=Średni rozmiar największej składowej spójnej,
+				scaled ticks=false,
+				tick label style={/pgf/number format/fixed},
+				label style={font=\footnotesize},
+				legend style={font=\footnotesize},
+				title style={font=\footnotesize},
+				% xtick={0, 25, 10, 15, 20},
+				% ytick={1000, 2000, 3000},
+				xmin=0.005, xmax=0.125,
+				ymin=0.0, ymax=1000.0,
+				legend pos=south east,
+			]
+
+			\addplot [orange, semithick] table [y=comps_sizes_mean, x=radius]{../../output2/1000-0_0:5_0-max_comps_sizes_means.csv};
+			\addlegendentry{~n = 1000}
+
+			\addplot [red, semithick] table [y=comps_sizes_mean, x=radius]{../../output2/700-0_0:5_0-max_comps_sizes_means.csv};
+			\addlegendentry{n = 700}
+
+			\addplot [cyan, semithick] table [y=comps_sizes_mean, x=radius]{../../output2/500-0_0:5_0-max_comps_sizes_means.csv};
+			\addlegendentry{n = 500}
+
+			\addplot [blue, semithick] table [y=comps_sizes_mean, x=radius]{../../output2/400-0_0:5_0-max_comps_sizes_means.csv};
+			\addlegendentry{n = 400}
+
+			\addplot [magenta, semithick] table [y=comps_sizes_mean, x=radius]{../../output2/300-0_0:5_0-max_comps_sizes_means.csv};
+			\addlegendentry{n = 300}
+		\end{axis}
+	\end{tikzpicture}
+\end{figure}
+
+\tikzsetnextfilename{2000-0_0:6_0-max_comps_sizes_means}
+\begin{figure}[tb]
+	\begin{tikzpicture}
+		\begin{axis}
+			[
+				width=\textwidth,
+				height=0.5\textwidth,
+				xlabel=Promień grafu,
+				ylabel=Średni rozmiar największej składowej spójnej,
+				scaled ticks=false,
+			    x tick label style={
+			        /pgf/number format/.cd,
+			            fixed,
+			            fixed zerofill,
+			            precision=3,
+			        /tikz/.cd
+			    },
+				label style={font=\footnotesize},
+				legend style={font=\footnotesize},
+				title style={font=\footnotesize},
+				% ytick={1000, 2000, 3000},
+				xmin=0.001, xmax=0.06,
+				ymin=0.0, ymax=2000.0,
+				legend pos=south east,
+			]
+
+			\addplot [orange, semithick, mark=*] table [y=comps_sizes_mean, x=radius]{../../output2/2000-0_0:6_0-max_comps_sizes_means.csv};
+			\addlegendentry{~n = 2000}
+		\end{axis}
+	\end{tikzpicture}
+\end{figure}
+
+
+\tikzsetnextfilename{20000-0_0:1_0-max_comps_sizes_means}
+\begin{figure}[tb]
+	\begin{tikzpicture}
+		\begin{axis}
+			[
+				width=\textwidth,
+				height=0.5\textwidth,
+				xlabel=Promień grafu,
+				ylabel=Średni rozmiar największej składowej spójnej,
+				scaled ticks=false,
+			    x tick label style={
+			        /pgf/number format/.cd,
+			            fixed,
+			            fixed zerofill,
+			            precision=3,
+			        /tikz/.cd
+			    },
+				label style={font=\footnotesize},
+				legend style={font=\footnotesize},
+				title style={font=\footnotesize},
+				% ytick={1000, 2000, 3000},
+				xmin=0.001, xmax=0.01,
+				ymin=0.0, ymax=20000.0,
+				legend pos=south east,
+			]
+
+			\addplot [orange, semithick, mark=*] table [y=comps_sizes_mean, x=radius]{../../output5/20000-0_0:1_0-max_comps_sizes_means.csv};
+			\addlegendentry{~n = 20000}
+		\end{axis}
+	\end{tikzpicture}
+\end{figure}
+
+
+\tikzsetnextfilename{10000-0_0:3_0-max_comps_sizes_means}
+\begin{figure}[tb]
+	\begin{tikzpicture}
+		\begin{axis}
+			[
+				width=\textwidth,
+				height=0.5\textwidth,
+				xlabel=Promień grafu,
+				ylabel=Średni rozmiar największej składowej spójnej,
+				scaled ticks=false,
+			    x tick label style={
+			        /pgf/number format/.cd,
+			            fixed,
+			            fixed zerofill,
+			            precision=3,
+			        /tikz/.cd
+			    },
+				label style={font=\footnotesize},
+				legend style={font=\footnotesize},
+				title style={font=\footnotesize},
+				% xtick={0, 25, 10, 15, 20},
+				% ytick={1000, 2000, 3000},
+				xmin=0.01, xmax=0.03,
+				ymin=0.0, ymax=10000.0,
+				legend pos=south east,
+			]
+
+			\addplot [orange, semithick, mark=*] table [y=comps_sizes_mean, x=radius]{../../output4/10000-0_0:3_0-max_comps_sizes_means.csv};
+			\addlegendentry{~n = 10000}
+		\end{axis}
+	\end{tikzpicture}
+\end{figure}
+
+
+\end{document}
